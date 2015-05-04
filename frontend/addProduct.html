@@ -24,6 +24,8 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 	<script  src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script  src="//api.filepicker.io/v1/filepicker.js"></script>
+	
 	<!-- <script>
 		window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')
 		$(document).ready(function(){
@@ -39,33 +41,33 @@
     <!-- Page Content -->
     <div class="container">
 		<form class="form-container" action="#" method="post">
-			<div class="form-title" align="center"><h2>Данные</h2></div>
+			<div class="form-title" align="center"><h2>Товар</h2></div>
 
-			<table align="center" cellpadding="5px" cellspacing="0px">
+			<table class="table table-bordered"align="center">
 			
-			<tr>
-			  <td class="form-title" align="right">Категория: </td>
-			  <td align="left"><input class="form-field" type="number" name="categoryId" value="{{ values['categoryId'] }}"></td>
-			</tr>
-			<tr>          
-			  <td class="form-title" align="right">Бренд: </td>
-			  <td align="left"><input class="form-field" type="number" name="brandId" value="{{ values['brandId'] }}"></td>
-			</tr>
-			<tr>          
-			  <td class="form-title" align="right">Модель: </td>
-			  <td align="left"><input class="form-field" type="text" name="model" value="{{ values['model'] }}"></td>
-			</tr>
-			<tr>          
-			  <td class="form-title" align="right">Картинка: </td>
-			  <td align="left"><input class="form-field" type="file" name="imgHref" value="{{ values['imgHref'] }}"></td>
-			</tr>
-			<tr>          
-			  <td class="form-title" align="right">Описание: </td>
-			  <td align="left"><input class="form-field" type="text" name="description" value="{{ values['description'] }}"></td>
-			</tr>
+				<tr>
+				  <td class="form-title" align="right">Категория: </td>
+				  <td align="left"><input class="form-field" type="number" name="categoryId" value="{{ values['categoryId'] }}"></td>
+				</tr>
+				<tr>          
+				  <td class="form-title" align="right">Бренд: </td>
+				  <td align="left"><input class="form-field" type="number" name="brandId" value="{{ values['brandId'] }}"></td>
+				</tr>
+				<tr>          
+				  <td class="form-title" align="right">Модель: </td>
+				  <td align="left"><input class="form-field" type="text" name="model" value="{{ values['model'] }}"></td>
+				</tr>
+				<tr>          
+				  <td class="form-title" align="right">Картинка: </td>
+				  <td align="left"><input class="form-field" type="file" name="imgHref" multiple value="{{ values['imgHref'] }}"></td>
+				</tr>
+				<tr>          
+				  <td class="form-title" align="right">Описание: </td>
+				  <td align="left"><input class="form-field" type="text" name="description" value="{{ values['description'] }}"></td>
+				</tr>
 
 			</table>
-			<input class="submit-button" align="center" type="submit" value="Сохранить">
+			<input class="btn btn-default" align="center" type="submit" value="Сохранить">
 		</form>
 
 	</div>
