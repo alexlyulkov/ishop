@@ -40,7 +40,8 @@
 <body>
     <!-- Page Content -->
     <div class="container">
-		<form class="form-container" action="#" method="post">
+		<form class="form-container" action="/save_product" method="post">
+			<input type="hidden" name="id" value="{{ values['productID'] }}">
 			<div class="form-title" align="center"><h2>Товар</h2></div>
 
 			<table class="table table-bordered"align="center">
