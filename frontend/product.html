@@ -60,7 +60,7 @@
 						<ul class="dropdown-menu">
 							{% for category in categories %}
 								<li>
-									<a href="{{ category.href }}" class="list-group-item">{{ category.text }}</a>
+									<a href="{{ category.href }}" class="list-group-item">{{ category.name }}</a>
 								</li>
 							{% endfor %}
 						</ul>
@@ -93,7 +93,7 @@
                     <a href="#" class="list-group-item">Category 2</a>
                     <a href="#" class="list-group-item">Category 3</a> -->
 					{% for category in categories %}
-						<a href="{{ category.href }}" class="list-group-item">{{ category.text }}</a>
+						<a href="{{ category.href }}" class="list-group-item">{{ category.name }}</a>
 					{% endfor %}
                 </div>
             </div>
