@@ -1,6 +1,6 @@
 sql_types = {'int':'INTEGER', 'long':'INTEGER', 'str':'TEXT', 'unicode':'TEXT', 'float':'REAL'}
 
-from classes import Product, Ad, Category
+from classes import Product, Ad, Category, Image
 import psycopg2
 import traceback
 
@@ -32,7 +32,7 @@ class database_sql():
         pass
 
     def load_category(self, category_id):
-        #returns list of products of this category
+        #returns list of products with this category
         return (Product(), Product())
 
     def get_categories(self):
@@ -49,3 +49,12 @@ class database_sql():
 
     def get_all_ads(self):
         return (Ad(), Ad())
+
+    def save_image(self, image):
+        pass
+
+    def get_image(self, image_id):
+        pass
+
+    def delete_image(self, image_id):
+        pass

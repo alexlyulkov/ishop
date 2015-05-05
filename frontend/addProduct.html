@@ -73,7 +73,7 @@
             <!-- /.navbar-collapse -->
     <!-- Page Content -->
     <div class="container">
-		<form class="form-container" action="/save_product" method="post">
+		<form class="form-container" action="/save_product" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="id" value="{{ values['productID'] }}">
 			<div class="form-title" align="center"><h2>Новый товар</h2></div>
 			<table class="table table-bordered"align="center">
@@ -91,7 +91,7 @@
 				</tr>
 				<tr>          
 				  <td class="form-title" align="right">Картинка: </td>
-				  <td align="left"><input class="form-field" type="file" name="imgHref" multiple value="{{ values['imgHref'] }}"></td>
+				  <td align="left"><input class="form-field" type="file" name="images" multiple value="{{ values['imgHref'] }}"></td>
 				</tr>
 				<tr>          
 				  <td class="form-title" align="right">Описание: </td>
@@ -101,7 +101,7 @@
 			<input class="btn btn-default" align="center" type="submit" value="Сохранить">
 		</form>
 		<h1></h1>
-		<form class="form-container" action="#" method="post">
+		<form class="form-container" action="#" method="post" >
 		<div class="form-title" align="center"><h2>Товары</h2></div>
 			<table class="table table-stripped">
 				<tr>

@@ -10,9 +10,20 @@ class Product():
         self.id = 1
         self.name = "product1"
         self.description = "good product"
+        self.brand = "nike"
         self.price = 123
         self.category = 1
-        self.image = 'binary_file'
+        self.images_ids = [1]
+
+class Ad():
+    def __init__(self):
+        self.id = 1
+        self.image_id = 2
+
+class Image():
+    def __init__(self):
+        self.id = 1
+        self.bytes = 'binary data'
 
 
 '''class User():
@@ -36,8 +47,3 @@ class Product():
         h.update(new_password)
         password_hash = h.hexdigest()
         employee.password_hash = password_hash'''
-
-class Ad():
-    def __init__(self):
-        self.id = 1
-        self.image = 'binary_file'
