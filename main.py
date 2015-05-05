@@ -2,6 +2,7 @@ import database_sql
 import http_server
 import os
 import urlparse
+import website
 
 import sys
 reload(sys)
@@ -25,7 +26,13 @@ if __name__ == "__main__":
     db.init_sqlite('temp/db')
     http_server.website.db = db
     api.db = db'''
+    
+    db = database_sql.database_sql()
+    website.db = db
+    http_server.db = db
+
     app.run(host = '0.0.0.0')
+    
 else:
     #heroku config:
     urlparse.uses_netloc.append("postgres")
@@ -38,5 +45,5 @@ else:
         host=url.hostname,
         port=url.port
     )
-    http_server.website.db = db
-    api.db = db
+    website.db = db
+    http_server.db = db

@@ -1,12 +1,16 @@
 from hashlib import sha256
 
 class Category():
-    def __init__(self):
+    def __init__(self, init_values = None):
         self.id = 1
         self.name = 'category1'
+        if init_values != None:
+            for key in init_values.keys():
+                setattr(self, key, init_values[key])
+
 
 class Product():
-    def __init__(self):
+    def __init__(self, init_values = None):
         self.id = 1
         self.name = "product1"
         self.description = "good product"
@@ -14,16 +18,35 @@ class Product():
         self.price = 123
         self.category = 1
         self.images_ids = [1]
+        if init_values != None:
+            for key in init_values.keys():
+                setattr(self, key, init_values[key])
 
 class Ad():
-    def __init__(self):
+    def __init__(self, init_values = None):
         self.id = 1
         self.image_id = 2
+        self.name = 'some ad name'
+        if init_values != None:
+            for key in init_values.keys():
+                setattr(self, key, init_values[key])
 
 class Image():
     def __init__(self):
         self.id = 1
         self.bytes = 'binary data'
+
+class Order():
+    def __init__(self, init_values = None):
+        self.id = 1
+        self.name = 'some client name'
+        self.phone = '+7 123'
+        self.address = 'abc'
+        self.products = [1,5,7]
+        if init_values != None:
+            for key in init_values.keys():
+                setattr(self, key, init_values[key])
+
 
 
 '''class User():

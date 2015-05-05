@@ -16,9 +16,11 @@ http_server.config['UPLOAD_FOLDER'] = 'uploads/'
 # These are the extension that we are accepting to be uploaded
 http_server.config['ALLOWED_EXTENSIONS'] = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
+db = None
+
 
 @http_server.route("/images/<filename>")
-def get_image(filename):
+def get_images(filename):
     try:
         return http_server.send_static_file('frontend/images/' + filename)
     except Exception, e:
@@ -60,45 +62,35 @@ def index_page():
         print e
 
 
-@http_server.route("/product_image/<int:product_id>")
-def get_product_picture(product_id):
+@http_server.route("/image/<int:image_id>")
+def get_image(image_id):
     try:
-        binary_image = 123
-        return send_file(io.BytesIO(binary_image),
+        if image_id == 1:
+            return http_server.send_static_file('frontend/images/product1.jpg')
+        if image_id == 2:
+            return http_server.send_static_file('frontend/images/ad1.jpg')
+
+        image = db.get_image(image_id)
+        return send_file(io.BytesIO(image.bytes),
                          attachment_filename='product_picture.png',
                      mimetype='image/png')
     except Exception, e:
         print traceback.format_exc()
         print e
-
-@http_server.route("/ad_image/<int:ad_id>")
-def get_ad_picture(ad_id):
-    try:
-        binary_image = 123
-        return send_file(io.BytesIO(binary_image),
-                         attachment_filename='product_picture.png',
-                     mimetype='image/png')
-    except Exception, e:
-        print traceback.format_exc()
-        print e
-
-
 
 @http_server.route("/product/<int:product_id>", methods=['GET', 'POST'])
-@website_authorization.requires_auth
 def product_page(product_id):
     try:
-        res =  website.edit_employee_page(-1, new_employee = True)
+        res =  website.product_page(product_id)
         return res
     except Exception, e:
         print traceback.format_exc()
         print e
 
-@http_server.route("/categoty/<int:categoty_id>", methods=['GET', 'POST'])
-@website_authorization.requires_auth
-def categoty_page(categoty_id):
+@http_server.route("/category/<int:category_id>", methods=['GET', 'POST'])
+def categoty_page(category_id):
     try:
-        res =  website.edit_employee_page(-1, new_employee = True)
+        res =  website.categoty_page(category_id)
         return res
     except Exception, e:
         print traceback.format_exc()
@@ -129,9 +121,13 @@ def add_product():
 @website_authorization.requires_auth
 def save_product():
     try:
-        uploaded_files = request.files.getlist("imgHref")
+        print type(request.files['images'])
+        uploaded_files = request.files.getlist("images")
         print uploaded_files
-        return ""
+        image_bytes = uploaded_files[0].read()
+        return send_file(io.BytesIO(image_bytes),
+                         attachment_filename='product_picture.png',
+                     mimetype='image/png')
     except Exception, e:
         print traceback.format_exc()
         print e
