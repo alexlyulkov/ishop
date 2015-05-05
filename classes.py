@@ -1,5 +1,6 @@
 from hashlib import sha256
 
+
 class Category():
     def __init__(self):
         self.id = 1
@@ -15,15 +16,36 @@ class Product():
         self.category = 1
         self.images_ids = [1]
 
+    def set_values(self, values):
+        for key in values.keys():
+            setattr(self, key, values[key])
+
+    def to_dict(self):
+        return self.__dict__
+
 class Ad():
     def __init__(self):
         self.id = 1
         self.image_id = 2
 
+    def set_values(self, values):
+        for key in values.keys():
+            setattr(self, key, values[key])
+
+    def to_dict(self):
+        return self.__dict__
+
 class Image():
     def __init__(self):
         self.id = 1
         self.bytes = 'binary data'
+
+    def set_values(self, values):
+        for key in values.keys():
+            setattr(self, key, values[key])
+
+    def to_dict(self):
+        return self.__dict__
 
 
 '''class User():
