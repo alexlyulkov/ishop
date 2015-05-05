@@ -60,7 +60,7 @@
 						<ul class="dropdown-menu">
 							{% for category in categories %}
 								<li>
-									<a href="{{ /category/category.id }}" class="list-group-item">{{ category.name }}</a>
+									<a href="/category/{{ category.id }}" class="list-group-item">{{ category.name }}</a>
 								</li>
 							{% endfor %}
 						</ul>
@@ -93,7 +93,7 @@
                     <a href="#" class="list-group-item">Category 2</a>
                     <a href="#" class="list-group-item">Category 3</a> -->
 					{% for category in categories %}
-						<a href="{{ /category/category.id }}" class="list-group-item">{{ category.name }}</a>
+						<a href="/category/{{ category.id }}" class="list-group-item">{{ category.name }}</a>
 					{% endfor %}
                 </div>
             </div>
@@ -124,11 +124,11 @@
 								{% for i in range(image | length()) %}
 								{% if i == 0 %}
 									<div class="item active">
-										<img class="slide-image" src="{{ /image/image.id }}" alt="none">
+										<img class="slide-image" src="/image/{{ image.id }}" alt="none">
 									</div>
 									{% else %}
 									<div class="item">
-										<img class="slide-image" src="{{ /image/image.id }}" alt="none">
+										<img class="slide-image" src="/image/{{ image.id }}" alt="none">
 									</div>
 									{% endif %}
 								{% endfor %}
