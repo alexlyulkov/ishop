@@ -119,7 +119,7 @@ class database_sql():
 
     def delete_product(self, product_id):
         try:
-            self.cursor.execute("DELETE from Products where Id = %s" % product_id)
+            self.cursor.execute("DELETE from Product where Id = %s" % product_id)
             self.db.commit
             print("Total rows deleted: %s" % self.cursor.rowcount)
         except Exception as e:
