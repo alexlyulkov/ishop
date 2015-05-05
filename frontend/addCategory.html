@@ -73,13 +73,13 @@
     <!-- Page Content -->
     <div class="container">
 		<form class="form-container" action="/save_category" method="post">
-			<input type="hidden" name="id" value="{{ values['categoryID'] }}">
+			<input type="hidden" name="id" value="{{ category.id }}">
 			<div class="form-title" align="center"><h2>Новая категория</h2></div>
 
 			<table class="table table-bordered"align="center">
 				<tr>
 				  <td class="form-title" align="right">Название категории: </td>
-				  <td align="left"><input class="form-field" type="number" name="categoryName" value="{{ values['categoryName'] }}"></td>
+				  <td align="left"><input class="form-field" required type="number" name="name" value="{{ category.name }}"></td>
 				</tr>
 			</table>
 			<input class="btn btn-default" align="center" type="submit" value="Сохранить">
@@ -96,7 +96,7 @@
 					<tr>
 						<td>{{ category.name }}</td>
 						<td>
-							<input type="checkbox" name="del" value="{{ delete }}">
+							<input type="checkbox" name="delete" value="">
 						</td>
 					</tr>
 				{% endfor %}

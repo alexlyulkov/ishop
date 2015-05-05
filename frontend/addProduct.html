@@ -74,28 +74,28 @@
     <!-- Page Content -->
     <div class="container">
 		<form class="form-container" action="/save_product" method="post" enctype="multipart/form-data">
-			<input type="hidden" name="id" value="{{ values['productID'] }}">
+			<input type="hidden" name="id" value="{{ product.id }}">
 			<div class="form-title" align="center"><h2>Новый товар</h2></div>
 			<table class="table table-bordered"align="center">
 				<tr>
 				  <td class="form-title" align="right">Категория: </td>
-				  <td align="left"><input class="form-field" type="number" name="categoryId" value="{{ values['categoryId'] }}"></td>
+				  <td align="left"><input class="form-field" required type="number" name="category" value="{{ product.category }}"></td>
 				</tr>
 				<tr>          
 				  <td class="form-title" align="right">Бренд: </td>
-				  <td align="left"><input class="form-field" type="number" name="brandId" value="{{ values['brandId'] }}"></td>
+				  <td align="left"><input class="form-field" required type="number" name="brand" value="{{ product.brand }}"></td>
 				</tr>
 				<tr>          
-				  <td class="form-title" align="right">Модель: </td>
-				  <td align="left"><input class="form-field" type="text" name="model" value="{{ values['model'] }}"></td>
+				  <td class="form-title" align="right">Название: </td>
+				  <td align="left"><input class="form-field" required type="text" name="name" value="{{ product.name }}"></td>
 				</tr>
 				<tr>          
 				  <td class="form-title" align="right">Картинка: </td>
-				  <td align="left"><input class="form-field" type="file" name="images" multiple value="{{ values['imgHref'] }}"></td>
+				  <td align="left"><input class="form-field" required type="file" name="images" multiple value=""></td>
 				</tr>
 				<tr>          
 				  <td class="form-title" align="right">Описание: </td>
-				  <td align="left"><input class="form-field" type="text" name="description" value="{{ values['description'] }}"></td>
+				  <td align="left"><input class="form-field" required type="text" name="description" value="{{ product.description }}"></td>
 				</tr>
 			</table>
 			<input class="btn btn-default" align="center" type="submit" value="Сохранить">
@@ -110,13 +110,13 @@
 					<th>Модель</th>
 					<th>Удалить</th>
 				</tr>
-				{% for item in items %}
+				{% for item in products %}
 					<tr>
 						<td>{{ item.category }}</td>
 						<td>{{ item.brand }}</td>
-						<td>{{ item.model }}</td>
+						<td>{{ item.name }}</td>
 						<td>
-							<input type="checkbox" name="del" value="{{ delete }}">
+							<input type="checkbox" name="delete" value="">
 						</td>
 					</tr>
 				{% endfor %}

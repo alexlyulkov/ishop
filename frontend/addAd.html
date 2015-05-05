@@ -73,21 +73,17 @@
             <!-- /.navbar-collapse -->
     <!-- Page Content -->
     <div class="container">
-		<form class="form-container" action="/save_product" method="post">
-			<input type="hidden" name="id" value="{{ values['productID'] }}">
+		<form class="form-container" action="/save_ad" method="post">
+			<input type="hidden" name="id" value="{{ ad.id }}">
 			<div class="form-title" align="center"><h2>Новая акция</h2></div>
 			<table class="table table-bordered"align="center">
 				<tr>          
 				  <td class="form-title" align="right">Название: </td>
-				  <td align="left"><input class="form-field" type="text" name="name" value="{{ values['name'] }}"></td>
+				  <td align="left"><input class="form-field" required type="text" name="name" value="{{ ad.name }}"></td>
 				</tr>
 				<tr>          
 				  <td class="form-title" align="right">Картинка: </td>
-				  <td align="left"><input class="form-field" type="file" name="imgHref" multiple value="{{ values['imgHref'] }}"></td>
-				</tr>
-				<tr>          
-				  <td class="form-title" align="right">Описание: </td>
-				  <td align="left"><input class="form-field" type="text" name="description" value="{{ values['description'] }}"></td>
+				  <td align="left"><input class="form-field" required type="file" name="images" multiple value=""></td>
 				</tr>
 			</table>
 			<input class="btn btn-default" align="center" type="submit" value="Сохранить">
@@ -104,7 +100,7 @@
 					<tr>
 						<td>{{ ad.name }}</td>
 						<td>
-							<input type="checkbox" name="del" value="{{ delete }}">
+							<input type="checkbox" name="delete" value="">
 						</td>
 					</tr>
 				{% endfor %}

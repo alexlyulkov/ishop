@@ -56,11 +56,11 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
-                        <a id='categoryList' href="#" class="dropdown-toggle" data-toggle="dropdown">Категории <b class="caret"></b></a>
+                        <a id='categoryList' href="index.html" class="dropdown-toggle" data-toggle="dropdown">Категории <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							{% for category in categories %}
 								<li>
-									<a href="{{ category.href }}" class="list-group-item">{{ category.name }}</a>
+									<a href="{{ /category/category.id }}" class="list-group-item">{{ category.name }}</a>
 								</li>
 							{% endfor %}
 						</ul>
@@ -93,7 +93,7 @@
                     <a href="#" class="list-group-item">Category 2</a>
                     <a href="#" class="list-group-item">Category 3</a> -->
 					{% for category in categories %}
-						<a href="{{ category.href }}" class="list-group-item">{{ category.name }}</a>
+						<a href="{{ /category/category.id }}" class="list-group-item">{{ category.name }}</a>
 					{% endfor %}
                 </div>
             </div>
@@ -120,11 +120,11 @@
 								{% for i in range(ad | length()) %}
 								{% if i == 0 %}
 									<div class="item active">
-										<img class="slide-image" src="{{ ad.href }}" alt="{{ ad.text }}">
+										<img class="slide-image" src="{{ /image/ad.image_id }}" alt="{{ ad.name }}">
 									</div>
 									{% else %}
 									<div class="item">
-										<img class="slide-image" src="{{ ad.href }}" alt="{{ ad.text }}">
+										<img class="slide-image" src="{{ /image/ad.image_id }}" alt="{{ ad.name }}">
 									</div>
 									{% endif %}
 								{% endfor %}
@@ -146,7 +146,7 @@
                     <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="thumbnail">
                             <!-- <img src="http://placehold.it/320x150" alt=""> -->
-							<img src="{% item.image.href %}" alt="{% item.image.text %}">
+							<img src="{% /image/item.images_ids[0] %}" alt="{% item.description %}">
                             <div class="caption">
                                 <h4 class="pull-right">{% item.price %}</h4>
                                 <h4><a href="#">{% item.name %}</a></h4>

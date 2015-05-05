@@ -60,7 +60,7 @@
 						<ul class="dropdown-menu">
 							{% for category in categories %}
 								<li>
-									<a href="{{ category.href }}" class="list-group-item">{{ category.name }}</a>
+									<a href="{{ /category/category.id }}" class="list-group-item">{{ category.name }}</a>
 								</li>
 							{% endfor %}
 						</ul>
@@ -93,7 +93,7 @@
                     <a href="#" class="list-group-item">Category 2</a>
                     <a href="#" class="list-group-item">Category 3</a> -->
 					{% for category in categories %}
-						<a href="{{ category.href }}" class="list-group-item">{{ category.name }}</a>
+						<a href="{{ /category/category.id }}" class="list-group-item">{{ category.name }}</a>
 					{% endfor %}
                 </div>
             </div>
@@ -109,7 +109,7 @@
                     <div class="col-md-12">
                         <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                             <ol class="carousel-indicators">
-							{% for image in productItem.images %}
+							{% for image in productItem.images_ids %}
 								{% for i in range(image | length()) %}
 									{% if i == 0 %}
 										<li data-target="#carousel-example-generic" data-slide-to="i" class="active"></li>
@@ -120,15 +120,15 @@
 							{% endfor %}
                             </ol>
                             <div class="carousel-inner">
-							{% for image in productItem.images %}
+							{% for image in productItem.images_ids %}
 								{% for i in range(image | length()) %}
 								{% if i == 0 %}
 									<div class="item active">
-										<img class="slide-image" src="{{ image.href }}" alt="{{ image.text }}">
+										<img class="slide-image" src="{{ /image/image.id }}" alt="none">
 									</div>
 									{% else %}
 									<div class="item">
-										<img class="slide-image" src="{{ image.href }}" alt="{{ image.text }}">
+										<img class="slide-image" src="{{ /image/image.id }}" alt="none">
 									</div>
 									{% endif %}
 								{% endfor %}

@@ -60,7 +60,7 @@
 						<ul class="dropdown-menu">
 							{% for category in categories %}
 								<li>
-									<a href="{{ category.href }}" class="list-group-item">{{ category.name }}</a>
+									<a href="{{ /category/category.id }}" class="list-group-item">{{ category.name }}</a>
 								</li>
 							{% endfor %}
 						</ul>
@@ -107,11 +107,11 @@
             <div class="col-lg-9 col-md-9 col-sm-6 col-xs-6">
 			<h2>Результаты</h2>
                 <div class="row">
-				{% for item in filteredItems %}
+				{% for item in filteredProducts%}
                     <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="thumbnail">
                             <!-- <img src="http://placehold.it/320x150" alt=""> -->
-							<img src="{% item.image.href %}" alt="{% item.image.text %}">
+							<img src="{% /image/item.images_ids[0] %}" alt="{% item.description %}">
                             <div class="caption">
                                 <h4 class="pull-right">{% item.price %}</h4>
                                 <h4><a href="#">{% item.name %}</a></h4>

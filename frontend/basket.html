@@ -60,7 +60,7 @@
 						<ul class="dropdown-menu">
 							{% for category in categories %}
 								<li>
-									<a href="{{ category.href }}" class="list-group-item">		{{ category.name }}</a>
+									<a href="{{ /category/category.id }}" class="list-group-item">		{{ category.name }}</a>
 								</li>
 							{% endfor %}
 						</ul>
@@ -90,7 +90,7 @@
                 <p class="lead">Категории</p>
                 <div class="list-group">
 					{% for category in categories %}
-						<a href="{{ category.href }}" class="list-group-item">{{ category.name }}</a>
+						<a href="{{ /category/category.id }}" class="list-group-item">{{ category.name }}</a>
 					{% endfor %}
                 </div>
             </div>
@@ -110,7 +110,7 @@
 									<td>{{ item.name }}</td>
 									<td>{{ item.price }}</td>
 									<td>
-										<input type="checkbox" name="del" value="{{ delete }}">
+										<input type="checkbox" name="delete" value="">
 									</td>
 								</tr>
 							{% endfor %}
