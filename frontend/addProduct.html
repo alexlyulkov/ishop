@@ -38,14 +38,45 @@
 </head>
 
 <body>
+	<!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">
+					<img alt="ShopAtUs" src="images/logo.png">
+				</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="addCategory.html">Категории</a>
+                    </li>
+                    <li>
+                        <a href="addProduct.html">Товары</a>
+                    </li>
+                    <li>
+                        <a href="addAd.html">Акции</a>
+                    </li>
+					<li class="pull-right">
+						<a href="orders.html">  Заказы  <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a>
+					</li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
     <!-- Page Content -->
     <div class="container">
 		<form class="form-container" action="/save_product" method="post">
 			<input type="hidden" name="id" value="{{ values['productID'] }}">
-			<div class="form-title" align="center"><h2>Товар</h2></div>
-
+			<div class="form-title" align="center"><h2>Новый товар</h2></div>
 			<table class="table table-bordered"align="center">
-			
 				<tr>
 				  <td class="form-title" align="right">Категория: </td>
 				  <td align="left"><input class="form-field" type="number" name="categoryId" value="{{ values['categoryId'] }}"></td>
@@ -66,9 +97,31 @@
 				  <td class="form-title" align="right">Описание: </td>
 				  <td align="left"><input class="form-field" type="text" name="description" value="{{ values['description'] }}"></td>
 				</tr>
-
 			</table>
 			<input class="btn btn-default" align="center" type="submit" value="Сохранить">
+		</form>
+		<h1></h1>
+		<form class="form-container" action="#" method="post">
+		<div class="form-title" align="center"><h2>Товары</h2></div>
+			<table class="table table-stripped">
+				<tr>
+					<th>Категория</th>
+					<th>Бренд</th>
+					<th>Модель</th>
+					<th>Удалить</th>
+				</tr>
+				{% for item in items %}
+					<tr>
+						<td>{{ item.category }}</td>
+						<td>{{ item.brand }}</td>
+						<td>{{ item.model }}</td>
+						<td>
+							<input type="checkbox" name="del" value="{{ delete }}">
+						</td>
+					</tr>
+				{% endfor %}
+			</table>
+			<input class="btn btn-default" type="submit" value="Удалить товары">
 		</form>
 
 	</div>
