@@ -1,22 +1,15 @@
 sql_types = {'int':'INTEGER', 'long':'INTEGER', 'str':'TEXT', 'unicode':'TEXT', 'float':'REAL'}
 
-from employee import Employee
-import sqlite3
+from classes import Product, Ad, Category
 import psycopg2
-import database
 import traceback
 
-class database_sql(database.database):
+class database_sql():
     def __init__(self):
         self.db = None
         self.cursor = None
         self.f = None
         
-    def init_sqlite(self, filename):
-        self.f = '?'
-        self.db = sqlite3.connect(filename, check_same_thread = False)
-        self.init_tables()
-
     def init_postgresql(self, database, user, password, host, port):
         self.f = '%s'
         self.db = psycopg2.connect(database = database, user = user, password = password,
@@ -25,27 +18,34 @@ class database_sql(database.database):
         
     def init_tables(self):
         self.cursor = self.db.cursor()
-
-        columns = Employee().to_dict()
-        del columns['id']
-
-        request = 'CREATE TABLE IF NOT EXISTS employees '
-        request += "(id INTEGER PRIMARY KEY UNIQUE"
-        for column, value in columns.items():
-            request += ', ' + column + ' ' + \
-                           sql_types[type(value).__name__]
-        request += ")"
-        
-        self.cursor.execute(request)
-        self.db.commit()
-        
-    def save_user(self, user):
-        pass
-
-    def load_user(self, user_email):
-        pass
-
+       
     def save_product(self, product):
-
-    def load_product(self, product_id):
         pass
+        
+    def load_product(self, product_id):
+        return Product()
+
+    def delete_product(self, product_id):
+        pass
+
+    def add_category(self, category):
+        pass
+
+    def load_category(self, category_id):
+        #returns list of products of this category
+        return (Product(), Product())
+
+    def get_categories(self):
+        return (Category(), Category())
+
+    def get_random_products(self, number_of_products):
+        return (Product() for i in xrange(number_of_products))
+
+    def add_ad(self, ad):
+        pass
+
+    def delete_ad(self, ad_id):
+        pass
+
+    def get_all_ads(self):
+        return (Ad(), Ad())

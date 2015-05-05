@@ -1,6 +1,5 @@
 import database_sql
 import http_server
-import api
 import os
 import urlparse
 
@@ -25,9 +24,8 @@ if __name__ == "__main__":
     '''    db = database_sql.database_sql()
     db.init_sqlite('temp/db')
     http_server.website.db = db
-    api.db = db
-    app.run(host = '0.0.0.0')'''
-    pass
+    api.db = db'''
+    app.run(host = '0.0.0.0')
 else:
     #heroku config:
     urlparse.uses_netloc.append("postgres")

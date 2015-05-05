@@ -1,19 +1,20 @@
 
 
-from flask import Flask, request, send_file
+from flask import Flask, request, send_file, render_template
 import traceback
 import json
 import io
 
 import website_authorization
 import website
-import utils
-import api
 
-http_server = Flask(__name__, template_folder = 'html_templates', static_folder='')
+http_server = Flask(__name__, template_folder = 'frontend/', static_folder='')
 http_server.debug = True
 
-
+# This is the path to the upload directory
+http_server.config['UPLOAD_FOLDER'] = 'uploads/'
+# These are the extension that we are accepting to be uploaded
+http_server.config['ALLOWED_EXTENSIONS'] = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 
 @http_server.route("/images/<filename>")
@@ -43,7 +44,7 @@ def get_font(filename):
 @http_server.route("/js/<filename>")
 def get_js(filename):
     try:
-        return http_server.send_static_file('frontend/js' + filename)
+        return http_server.send_static_file('frontend/js/' + filename)
     except Exception, e:
         print traceback.format_exc()
         print e
@@ -59,7 +60,7 @@ def index_page():
         print e
 
 
-@http_server.route("/product_picture/<int:product_id>")
+@http_server.route("/product_image/<int:product_id>")
 def get_product_picture(product_id):
     try:
         binary_image = 123
@@ -69,6 +70,18 @@ def get_product_picture(product_id):
     except Exception, e:
         print traceback.format_exc()
         print e
+
+@http_server.route("/ad_image/<int:ad_id>")
+def get_ad_picture(ad_id):
+    try:
+        binary_image = 123
+        return send_file(io.BytesIO(binary_image),
+                         attachment_filename='product_picture.png',
+                     mimetype='image/png')
+    except Exception, e:
+        print traceback.format_exc()
+        print e
+
 
 
 @http_server.route("/product/<int:product_id>", methods=['GET', 'POST'])
@@ -91,12 +104,34 @@ def categoty_page(categoty_id):
         print traceback.format_exc()
         print e
 
-@http_server.route("/cart/", methods=['GET', 'POST'])
+@http_server.route("/cart", methods=['GET', 'POST'])
 @website_authorization.requires_auth
-def product_page(product_id):
+def cart_page(product_id):
     try:
         res =  website.edit_employee_page(-1, new_employee = True)
         return res
+    except Exception, e:
+        print traceback.format_exc()
+        print e
+
+@http_server.route("/new_product", methods=['GET', 'POST'])
+@website_authorization.requires_auth
+def add_product():
+    try:
+        return render_template('addProduct.html', \
+                               values = {})
+
+    except Exception, e:
+        print traceback.format_exc()
+        print e
+
+@http_server.route("/save_product", methods=['GET', 'POST'])
+@website_authorization.requires_auth
+def save_product():
+    try:
+        uploaded_files = request.files.getlist("imgHref")
+        print uploaded_files
+        return ""
     except Exception, e:
         print traceback.format_exc()
         print e
