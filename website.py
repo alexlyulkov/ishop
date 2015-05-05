@@ -1,4 +1,4 @@
-from flask import render_template, redirect
+from flask import render_template, redirect, make_response, request
 import json
 from classes import *
 
@@ -12,8 +12,8 @@ def save_images(files):
     return image_ids
     
 
-def save_ad(values):
-   #save_images(values['files']
+def save_ad(values, images):
+    values['image_id'] = save_images(values['files'])[0]
     ad = Ad(values)
     if ad.id == -1:
         db.add_ad(ad)
@@ -24,7 +24,8 @@ def save_ad(values):
                            categories = db.get_categories,
                            productItemsAds = db.get_random_products)
 
-def save_product(values):
+def save_product(values, images):
+    values['images_ids'] = save_images(values['files'])
     product = Product(values)
     if product.id == -1:
         db.add_product(product)
@@ -91,6 +92,52 @@ def Contact_us_page():
     categories = db.get_categories()
     return render_template('contactUs.html',
                            categories = categories)
+
+def ordering_page():
+    categories = db.get_categories()
+    return render_template('ordering.html',
+                           categories = categories)
+
+def add_to_cart(product_id):
+    cart = request.cookies.get('cart')
+    if cart:
+        cart = json.loads(cart)
+    else:
+        cart = []
+    cart.append(product_id)
+    cart = json.dumps(cart)
+    
+    resp = make_response(redirect('/cart'))
+    resp.set_cookie('cart', cart)
+    return resp
+
+def delete_from_cart(product_id):
+    cart = request.cookies.get('cart')
+    if cart:
+        cart = json.loads(cart)
+    else:
+        cart = []
+    cart.remove(product_id)
+    cart = json.dumps(cart)
+    
+    resp = make_response(redirect('/cart'))
+    resp.set_cookie('cart', cart)
+    return resp
+
+def cart_page():
+    cart = request.cookies.get('cart')
+    if cart:
+        cart = json.loads(cart)
+    else:
+        cart = []
+    products = [db.load_product(product_id) for product_id in cart]
+    return render_template('basket.html',
+                           categories = db.get_categories,
+                           boughtItems = products)
+
+
+                           
+    
 
 
 

@@ -4,6 +4,7 @@ from flask import Flask, request, send_file, render_template
 import traceback
 import json
 import io
+from classes import *
 
 import website_authorization
 import website
@@ -60,6 +61,7 @@ def index_page():
     except Exception, e:
         print traceback.format_exc()
         print e
+        return traceback.format_exc() + '\n\n' + str(e)
 
 
 @http_server.route("/image/<int:image_id>")
@@ -90,7 +92,7 @@ def product_page(product_id):
 @http_server.route("/category/<int:category_id>", methods=['GET', 'POST'])
 def categoty_page(category_id):
     try:
-        res =  website.categoty_page(category_id)
+        res =  website.category_page(category_id)
         return res
     except Exception, e:
         print traceback.format_exc()
@@ -100,8 +102,7 @@ def categoty_page(category_id):
 @website_authorization.requires_auth
 def cart_page(product_id):
     try:
-        res =  website.edit_employee_page(-1, new_employee = True)
-        return res
+        return website.cart_page()
     except Exception, e:
         print traceback.format_exc()
         print e
@@ -111,7 +112,7 @@ def cart_page(product_id):
 def add_product():
     try:
         return render_template('addProduct.html', \
-                               values = {})
+                               product = Product())
 
     except Exception, e:
         print traceback.format_exc()
