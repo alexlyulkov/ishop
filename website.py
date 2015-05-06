@@ -35,7 +35,7 @@ def save_ad(values, images):
     else:
         db.update_ad(ad)
 
-    return redirect("/")
+    return redirect("/new_ad")
     
 def delete_ad(ad_id):
     ad = db.load_ad(ad_id)
@@ -89,7 +89,7 @@ def save_category(values):
     else:
         db.update_category(category)
 
-    return redirect("/")
+    return redirect("/new_category")
 
 def delete_category(category_id):
     products = db.load_category_products(category_id)
@@ -125,11 +125,11 @@ def index_page():
 
 def category_page(category_id):
     categories = db.load_categories()
-    products = db.load_category_products(categoty_id)
+    products = db.load_category_products(category_id)
 
     return render_template('category.html',
                            categories = categories,
-                           products = products)
+                           filteredProducts = products)
 
 def product_page(product_id):
     categories = db.load_categories()
@@ -137,11 +137,16 @@ def product_page(product_id):
 
     return render_template('product.html',
                            categories = categories,
-                           product = product)
+                           productItem = product)
 
 def contact_us_page():
     categories = db.load_categories()
     return render_template('contactUs.html',
+                           categories = categories)
+
+def delivery_page():
+    categories = db.load_categories()
+    return render_template('delivery.html',
                            categories = categories)
 
 def ordering_page():
@@ -215,7 +220,7 @@ def cart_page():
     for p in products:
         cost += p.price
     return render_template('basket.html',
-                           categories = db.load_categories,
+                           categories = db.load_categories(),
                            boughtItems = products,
                            priceSum = cost)
 
