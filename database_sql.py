@@ -3,7 +3,6 @@ sql_types = {'int':'INTEGER', 'long':'INTEGER', 'str':'TEXT', 'unicode':'TEXT', 
 from classes import Product, Ad, Category, Image
 import psycopg2
 import traceback
-from random import randrange
 
 class database_sql():
     def __init__(self):
@@ -23,87 +22,64 @@ class database_sql():
             columns = Category().to_dict()
             del columns['id']
             request = 'CREATE TABLE IF NOT EXISTS Category '
-            request += "(id INTEGER PRIMARY KEY UNIQUE"
+            request += "(id SERIAL UNIQUE"
             for column, value in columns.items():
                 request += ', ' + column + ' ' + \
                            sql_types[type(value).__name__]
             request += ")"
             self.cursor.execute(request)
             self.db.commit()
-
 
             columns = Product().to_dict()
             del columns['id']
             request = 'CREATE TABLE IF NOT EXISTS Product '
-            request += "(id INTEGER PRIMARY KEY UNIQUE"
+            request += "(id SERIAL UNIQUE"
             for column, value in columns.items():
                 request += ', ' + column + ' ' + \
                            sql_types[type(value).__name__]
             request += ")"
-        
             self.cursor.execute(request)
             self.db.commit()
-
-
 
             columns = Ad().to_dict()
             del columns['id']
-
             request = 'CREATE TABLE IF NOT EXISTS Ad '
-            request += "(id INTEGER PRIMARY KEY UNIQUE"
+            request += "(id SERIAL UNIQUE"
             for column, value in columns.items():
                 request += ', ' + column + ' ' + \
                            sql_types[type(value).__name__]
             request += ")"
-        
             self.cursor.execute(request)
             self.db.commit()
 
-
             columns = Image().to_dict()
             del columns['id']
-
             request = 'CREATE TABLE IF NOT EXISTS Image '
-            request += "(id INTEGER PRIMARY KEY UNIQUE"
-            for column, value in columns.items():
-                request += ', ' + column + ' ' + \
-                           sql_types[type(value).__name__]
-            request += ")"
-        
+            request += "(id SERIAL UNIQUE, bytes bytea)"
             self.cursor.execute(request)
             self.db.commit()
         except Exception as e:
             print e
 
     def add_product(self, product):
-        try:
-            self.cursor.execute('SELECT max(id) FROM Product')
-            max_id = self.cursor.fetchone()[0]
-        except Exception as e:
-            print e
-            print traceback.format_exc()
-            max_id = None
-            
-        if max_id == None:
-            max_id = 0
-        new_id = max_id + 1
-        product.id = new_id
-        
         parameters = product.to_dict()
+        del parameters['id']
         keys = parameters.keys()
         request = 'INSERT INTO Product ('
         for key in keys:
             request += key + '=' + self.f + ', '
         request = request[0:-2]
         request += ')'
-        
+        val = ""
         try:
             self.cursor.execute(request, parameters.values())
+            self.cursor.execute("SELECT LASTVAL()")
+            val = self.cursor.fetchone()[1]
             self.db.commit()
         except Exception as e:
             print e  
             return None
-        return new_id
+        return val
 
     def update_product(self, product):
         parameters = product.to_dict().keys():
@@ -149,41 +125,31 @@ class database_sql():
     def delete_product(self, product_id):
         try:
             self.cursor.execute("DELETE from Product where Id = %s" % product_id)
-            self.db.commit
+            self.db.commit()
             print("Total rows deleted: %s" % self.cursor.rowcount)
         except Exception as e:
             print e
 
 
     def add_category(self, category):
-        try:
-            self.cursor.execute('SELECT max(id) FROM Category')
-            max_id = self.cursor.fetchone()[0]
-        except Exception as e:
-            print e
-            print traceback.format_exc()
-            max_id = None
-            
-        if max_id == None:
-            max_id = 0
-        new_id = max_id + 1
-        category.id = new_id
-        
         parameters = category.to_dict()
+        del parameters['id']
         keys = parameters.keys()
         request = 'INSERT INTO Category ('
         for key in keys:
             request += key + '=' + self.f + ', '
         request = request[0:-2]
         request += ')'
-        
+        val = ""
         try:
             self.cursor.execute(request, parameters.values())
+            self.cursor.execute("SELECT LASTVAL()")
+            val = self.cursor.fetchone()[1]
             self.db.commit()
         except Exception as e:
             print e  
             return None
-        return new_id
+        return val
         
     def update_category(self, category):
         parameters = category.to_dict().keys():
@@ -252,18 +218,22 @@ class database_sql():
         return categories
 
     def get_random_products(self, number_of_products):
-
-        if (int(max_id) < int(number_of_product)):
-            return None
-
-        request = 'SELECT * from Product OFFSET RANDOM() * (SELECT COUNT(*) FROM Product) LIMIT '
-        request += int(number_of_products)
+        self.cursor.execute("SELECT COUNT(*) FROM Product")
+        count = self.cursor.fetchone()[1]
+        
+        request = 'SELECT * from Product'
+        
+        if (int(count) > int(number_of_product)):
+            request += ' OFFSET RANDOM() * '
+            request += count
+            request += ' LIMIT '
+            request += int(number_of_products)
         try:
             self.cursor.execute(request)
             rows = self.cursor.fetchall()
         except Exception as e:
             print e
-            rows = []
+               rows = []
 
         products = []
         for row in rows:
@@ -276,34 +246,24 @@ class database_sql():
         return products
 
     def add_ad(self, ad):
-        try:
-            self.cursor.execute('SELECT max(id) FROM Ad')
-            max_id = self.cursor.fetchone()[0]
-        except Exception as e:
-            print e
-            print traceback.format_exc()
-            max_id = None
-            
-        if max_id == None:
-            max_id = 0
-        new_id = max_id + 1
-        ad.id = new_id
-        
         parameters = ad.to_dict()
+        del parameters['id']
         keys = parameters.keys()
         request = 'INSERT INTO Ad ('
         for key in keys:
             request += key + '=' + self.f + ', '
         request = request[0:-2]
         request += ')'
-        
+        val = ""
         try:
             self.cursor.execute(request, parameters.values())
+            self.cursor.execute("SELECT LASTVAL()")
+            val = self.cursor.fetchone()[1]
             self.db.commit()
         except Exception as e:
             print e  
             return None
-        return new_id
+        return val
 
     def update_ad(self, ad):
         parameters = ad.to_dict().keys():
@@ -322,7 +282,7 @@ class database_sql():
     def delete_ad(self, ad_id):
         try:
             self.cursor.execute("DELETE from Ad where id = %s" % ad_id)
-            self.db.commit
+            self.db.commit()
             print("Total rows deleted: %s" % self.cursor.rowcount)
         except Exception as e:
             print e
@@ -353,37 +313,26 @@ class database_sql():
         return ads
 
     def add_image(self, image):
-        try:
-            self.cursor.execute('SELECT max(id) FROM Image')
-            max_id = self.cursor.fetchone()[0]
-        except Exception as e:
-            print e
-            print traceback.format_exc()
-            max_id = None
-            
-        if max_id == None:
-            max_id = 0
-        new_id = max_id + 1
-        image.id = new_id
-        
         parameters = image.to_dict()
+        del parameters['id']
         keys = parameters.keys()
         request = 'INSERT INTO Image ('
         for key in keys:
             request += key + '=' + self.f + ', '
         request = request[0:-2]
         request += ')'
-        
+        val = ""
         try:
             self.cursor.execute(request, parameters.values())
+            self.cursor.execute("SELECT LASTVAL()")
+            val = self.cursor.fetchone()[1]
             self.db.commit()
         except Exception as e:
             print e  
             return None
-        return new_id
+        return val
 
     def update_image(self, image):
-
         parameters = image.to_dict().keys():
         request = 'UPDATE Image SET '
         for column in parameters:
@@ -398,35 +347,31 @@ class database_sql():
         except Exception as e:
             print e
 
-
-        #mypic = open(image, 'rb').read()
-                    
-        #self.cursor.("insert into Image (Id, Bytes) values (%s, %s)",
-        #                        (psycopg2.Binary(mypic),))
-
-
-
     def get_image(self, image_id):
         columns = Image().to_dict().keys()
         request = 'SELECT '
         for column in columns:
             request += column + ', '
         request = request[0:-2] + ' FROM Image '
-
+        row = []
         try:
             self.cursor.execute(request)
             row = self.cursor.fetchone()
-
         except Exception as e:
             print e
             row = None
 
-        return row
+        values_dict = {}
+        for i in xrange(len(columns)):
+            values_dict[columns[i]] = row[i]
+        ad = Ad()
+        ad.set_values(values_dict)
+        return ad
 
     def delete_image(self, image_id):
         try:
             self.cursor.execute("DELETE from Image where id = %s" % image_id)
-            self.db.commit
+            self.db.commit()
             print("Total rows deleted: %s" % self.cursor.rowcount)
         except Exception as e:
             print e
