@@ -54,6 +54,7 @@ class database_sql():
 
             columns = Image().to_dict()
             del columns['id']
+            
             request = 'CREATE TABLE IF NOT EXISTS Image '
             request += "(id SERIAL UNIQUE, bytes bytea)"
             self.cursor.execute(request)
@@ -115,6 +116,31 @@ class database_sql():
             print e
         
     def load_product(self, product_id):
+        columns = Product().to_dict().keys()
+        request = 'SELECT '
+        for column in columns:
+            request += column + ', '
+        request = request[0:-2] + ' FROM Product '
+        request += ' WHERE id = '
+        request += product_id
+        rows = []
+        try:
+            self.cursor.execute(request)
+            rows = self.cursor.fetchall()
+        except Exception as e:
+            print e
+
+        products = []
+        for row in rows:
+            values_dict = {}
+            for i in xrange(len(columns)):
+                values_dict[columns[i]] = row[i]
+            product = Product()
+            product.set_values(values_dict)
+            products.append(product)
+        return products
+
+    def load_products(self):
         columns = Employee().to_dict().keys()
         request = 'SELECT '
         for column in columns:
@@ -182,7 +208,7 @@ class database_sql():
         except Exception as e:
             print e
 
-    def load_category(self, category_id):
+    def load_category_products(self, category_id):
         columns = Employee().to_dict().keys()
         request = 'SELECT '
         for column in columns:
@@ -208,7 +234,7 @@ class database_sql():
             products.append(product)
         return products
 
-    def get_categories(self):
+    def load_categories(self):
         columns = Category().to_dict().keys()
         request = 'SELECT '
         for column in columns:
@@ -231,7 +257,34 @@ class database_sql():
             cat.set_values(values_dict)
             categories.append(cat)
         return categories
+        
+    def load_category(self, category_id):
+        columns = Category().to_dict().keys()
+        request = 'SELECT '
+        for column in columns:
+            request += column + ', '
+        request = request[0:-2] + ' FROM Category '
+        request += ' WHERE id = '
+        request += category_id
+        rows = []
+        try:
+            self.cursor.execute(request)
+            rows = self.cursor.fetchall()
 
+        except Exception as e:
+            print e
+
+        categories = []
+        for row in rows:
+            values_dict = {}
+            for i in xrange(len(columns)):
+                values_dict[columns[i]] = row[i]
+            cat = Category()
+            cat.set_values(values_dict)
+            categories.append(cat)
+        return categories
+        
+  
     def get_random_products(self, number_of_products):
         columns = Product().to_dict().keys()
         self.cursor.execute("SELECT COUNT(*) FROM Product")
@@ -296,7 +349,7 @@ class database_sql():
         except Exception as e:
             print e
 
-    def load_ad(self, ad_id):
+    def load_ad_products(self, ad_id):
         columns = Employee().to_dict().keys()
         request = 'SELECT '
         for column in columns:
@@ -322,12 +375,38 @@ class database_sql():
             products.append(product)
         return products
 
-    def get_all_ads(self):
+    def load_ads(self):
         columns = Ad().to_dict().keys()
         request = 'SELECT '
         for column in columns:
             request += column + ', '
         request = request[0:-2] + ' FROM Ad '
+        rows = []
+        try:
+            self.cursor.execute(request)
+            rows = self.cursor.fetchall()
+
+        except Exception as e:
+            print e
+
+        ads = []
+        for row in rows:
+            values_dict = {}
+            for i in xrange(len(columns)):
+                values_dict[columns[i]] = row[i]
+            ad = Ad()
+            ad.set_values(values_dict)
+            ads.append(ad)
+        return ads
+
+    def load_ad(self, ad_id):
+        columns = Ad().to_dict().keys()
+        request = 'SELECT '
+        for column in columns:
+            request += column + ', '
+        request = request[0:-2] + ' FROM Ad '
+        request += ' WHERE id = '
+        request += ad_id
         rows = []
         try:
             self.cursor.execute(request)
@@ -353,6 +432,7 @@ class database_sql():
             print("Total rows deleted: %s" % self.cursor.rowcount)
         except Exception as e:
             print e
+
 
 
     def add_image(self, image):
@@ -459,13 +539,14 @@ class database_sql():
         except Exception as e:
             print e
         
-    def load_order(self, order_id):
-
-        columns = Order().to_dict().keys()
+    def load_order_products(self, order_id):
+        columns = Product().to_dict().keys()
         request = 'SELECT '
         for column in columns:
             request += column + ', '
-        request = request[0:-2] + ' FROM Order '
+        request = request[0:-2] + ' FROM Product '
+        request += ' WHERE order = '
+        request += order_id
         rows = []
         try:
             self.cursor.execute(request)
@@ -473,17 +554,17 @@ class database_sql():
         except Exception as e:
             print e
 
-        orders = []
+        products = []
         for row in rows:
             values_dict = {}
             for i in xrange(len(columns)):
                 values_dict[columns[i]] = row[i]
-            order = Order()
-            order.set_values(values_dict)
-            orders.append(order)
-        return orders
+            product = Product()
+            product.set_values(values_dict)
+            products.append(product)
+        return products
 
-    def get_all_orders(self):
+    def load_orders(self):
         columns = Order().to_dict().keys()
         request = 'SELECT '
         for column in columns:
@@ -505,3 +586,30 @@ class database_sql():
             order.set_values(values_dict)
             orders.append(order)
         return orders
+
+    def load_order(self, order_id):
+        columns = Order().to_dict().keys()
+        request = 'SELECT '
+        for column in columns:
+            request += column + ', '
+        request = request[0:-2] + ' FROM Order '
+        request += ' WHERE id = '
+        request += order_id
+        rows = []
+        try:
+            self.cursor.execute(request)
+            rows = self.cursor.fetchall()
+
+        except Exception as e:
+            print e
+
+        orders = []
+        for row in rows:
+            values_dict = {}
+            for i in xrange(len(columns)):
+                values_dict[columns[i]] = row[i]
+            order = Order()
+            order.set_values(values_dict)
+            orders.append(order)
+        return orders
+        
