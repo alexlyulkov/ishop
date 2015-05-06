@@ -96,14 +96,14 @@
             </div>
 
             <div class="col-lg-9 col-md-9 col-sm-6 col-xs-6">
-				<form class="form-container" action="/ordering/" method="post">
+				<!-- <form class="form-container" action="/ordering/" method="post"> -->
 					<h1>
 						Корзина
-						<button class="btn btn-default buyButton pull-right" type="submit">Оформить заказ</button>
+						<!-- <button class="btn btn-default buyButton pull-right" type="submit">Оформить заказ</button> -->
 					</h1>
-				</form>
+				<!-- </form> -->
 				<div class="container">
-					<form class="form-container" action="/delete_from_cart/" method="post">
+					<form class="form-container" action="/ordering/" method="post">
 						<table class="table table-stripped">
 							<tr>
 								<th>Название товара</th>
@@ -116,7 +116,8 @@
 									<td>{{ item.price }}</td>
 									<td>
 										<!-- <input type="checkbox" name="delete" value=""> -->
-										<input type="checkbox" name="{{ item.id }}" value="">
+										<!-- <input type="checkbox" name="{{ item.id }}" value=""> -->
+										<button class="btn btn-default" type="button"> <a href="/delete_from_cart/{{ item.id }}"></a>X</button>
 									</td>
 								</tr>
 							{% endfor %}
@@ -126,7 +127,7 @@
 								<th>{{ priceSum }}</th>
 							</tr>
 						</table>
-						<input class="btn btn-default" type="submit" value="Удалить товары">
+						<input class="btn btn-default" type="submit" value="Оформить заказ">
 					</form>
 					
 				</div>
