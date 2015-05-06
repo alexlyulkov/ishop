@@ -141,7 +141,7 @@ class database_sql():
         return products
 
     def load_products(self):
-        columns = Employee().to_dict().keys()
+        columns = Product().to_dict().keys()
         request = 'SELECT '
         for column in columns:
             request += column + ', '
@@ -209,7 +209,7 @@ class database_sql():
             print e
 
     def load_category_products(self, category_id):
-        columns = Employee().to_dict().keys()
+        columns = Product().to_dict().keys()
         request = 'SELECT '
         for column in columns:
             request += column + ', '
@@ -350,7 +350,7 @@ class database_sql():
             print e
 
     def load_ad_products(self, ad_id):
-        columns = Employee().to_dict().keys()
+        columns = Product().to_dict().keys()
         request = 'SELECT '
         for column in columns:
             request += column + ', '
