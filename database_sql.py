@@ -30,17 +30,15 @@ class database_sql():
             self.cursor.execute(request)
             self.db.commit()
 
-            columns = Product().to_dict()
+
+            columns = Image().to_dict()
             del columns['id']
-            request = 'CREATE TABLE IF NOT EXISTS Product '
-            request += "(id SERIAL UNIQUE"
-            for column, value in columns.items():
-                request += ', ' + column + ' ' + \
-                           sql_types[type(value).__name__]
-            request += ")"
+            request = 'CREATE TABLE IF NOT EXISTS Image '
+            request += "(id SERIAL UNIQUE, bytes bytea)"
             self.cursor.execute(request)
             self.db.commit()
-
+            
+            
             columns = Ad().to_dict()
             del columns['id']
             request = 'CREATE TABLE IF NOT EXISTS Ad '
@@ -51,14 +49,19 @@ class database_sql():
             request += ")"
             self.cursor.execute(request)
             self.db.commit()
-
-            columns = Image().to_dict()
-            del columns['id']
             
-            request = 'CREATE TABLE IF NOT EXISTS Image '
-            request += "(id SERIAL UNIQUE, bytes bytea)"
+            
+            columns = Product().to_dict()
+            del columns['id']
+            request = 'CREATE TABLE IF NOT EXISTS Product '
+            request += "(id SERIAL UNIQUE"
+            for column, value in columns.items():
+                request += ', ' + column + ' ' + \
+                           sql_types[type(value).__name__]
+            request += ")"
             self.cursor.execute(request)
             self.db.commit()
+            
             
             columns = Order().to_dict()
             del columns['id']
@@ -73,6 +76,23 @@ class database_sql():
             
         except Exception as e:
             print e
+
+    def cleanup_db(self):
+        try:
+            self.cursor.execute("DROP TABLE IF EXISTS Order")
+            self.cursor.execute("DROP TABLE IF EXISTS Poduct")
+            self.cursor.execute("DROP TABLE IF EXISTS Ad")
+            self.cursor.execute("DROP TABLE IF EXISTS Image")
+            self.cursor.execute("DROP TABLE IF EXISTS Category")
+            self.db.commit()
+        except Exception as e:
+            print e
+        finally:
+            self.db.close()
+            
+            
+        
+
 
 
     def add_product(self, product):
