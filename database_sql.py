@@ -256,7 +256,7 @@ class database_sql():
         if (int(max_id) < int(number_of_product)):
             return None
 
-        request = 'SELECT * from Product OFFSET RANDOM() * (CELECT COUNT(*) FROM Product) LIMIT '
+        request = 'SELECT * from Product OFFSET RANDOM() * (SELECT COUNT(*) FROM Product) LIMIT '
         request += int(number_of_products)
         try:
             self.cursor.execute(request)
