@@ -160,9 +160,11 @@ def make_order(values):
     order.products = cart
     order_id = db.add_order(order)
     order.id = order_id
-    return render_template('orderSuccess.html',
-                           categories = db.load_categories(),
-                           order = order)
+    resp = make_response(render_template('orderSuccess.html',
+                                         categories = db.load_categories(),
+                                         order = order))
+    resp.set_cookie('cart', expires = 0)
+    return resp
 
 def order_page(order_id):
     order = db.load_order(order_id)

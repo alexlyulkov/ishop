@@ -204,6 +204,10 @@ class database_sql():
         self.cursor.execute(request, parameters.values())
         self.db.commit()
 
+    def delete_category(self, category_id):
+        self.cursor.execute("DELETE from Category where id = %s" % category_id)
+        self.db.commit()
+
 
     def load_category_products(self, category_id):
         columns = Product().to_dict().keys()
@@ -556,3 +560,6 @@ class database_sql():
             orders.append(order)
         return orders[0]
         
+    def delete_order(self, order_id):
+        self.cursor.execute("DELETE from Orders where id = %s" % order_id)
+        self.db.commit()
