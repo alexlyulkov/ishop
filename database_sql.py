@@ -554,5 +554,5 @@ class database_sql():
             order = Order()
             order.set_values(values_dict)
             orders.append(order)
-        return orders
+        return orders[0]
         

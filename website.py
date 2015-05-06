@@ -166,9 +166,13 @@ def make_order(values):
 
 def order_page(order_id):
     order = db.load_order(order_id)
+    products = []
+    for id in order.products:
+        products.append(db.load_product(id))
     return render_template('order.html',
                            categories = db.load_categories(),
-                           order = order)
+                           order = order,
+                           products = products)
 
 def delete_order(order_id):
     db.delete_order(order_id)
