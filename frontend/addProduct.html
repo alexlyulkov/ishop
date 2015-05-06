@@ -79,7 +79,14 @@
 			<table class="table table-bordered"align="center">
 				<tr>
 				  <td class="form-title" align="right">Категория: </td>
-				  <td align="left"><input class="form-field" required type="number" name="category" value="{{ product.category }}"></td>
+				  <!-- <td align="left"><input class="form-field" required type="number" name="category" value="{{ product.category }}"></td> -->
+				  <td>
+					  <select required>
+						  {% for category in categories %}
+							<option value="{{ category.id }}">{{ category.name }}</option>
+						  {% endfor %}
+					  </select>
+				  </td?
 				</tr>
 				<tr>          
 				  <td class="form-title" align="right">Бренд: </td>
