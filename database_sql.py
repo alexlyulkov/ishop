@@ -523,7 +523,7 @@ class database_sql():
         self.cursor.execute(request)
         rows = self.cursor.fetchall()
 
-        order = []
+        orders = []
         for row in rows:
             values_dict = {}
             for i in xrange(len(columns)):

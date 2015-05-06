@@ -291,7 +291,7 @@ def delete_product(product_id):
 @website_authorization.requires_auth
 def orders():
     try:
-        return website.orders()
+        return website.orders_page()
     except Exception, e:
         print traceback.format_exc()
         return '<pre>' + traceback.format_exc() + '</pre>'
@@ -300,7 +300,7 @@ def orders():
 @website_authorization.requires_auth
 def order(order_id):
     try:
-        return website.order(order_id)
+        return website.order_page(order_id)
     except Exception, e:
         print traceback.format_exc()
         return '<pre>' + traceback.format_exc() + '</pre>'
