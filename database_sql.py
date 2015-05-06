@@ -120,8 +120,6 @@ class database_sql():
         request = 'UPDATE Product SET '
         for key in keys:
             request += key + '=' + self.f + ', '
-            if (type(parameters[key]).__name__=='list'):
-                parameters[key] = 'ARRAY' + parameters[key]
         request = request[0:-2]
         request += " WHERE id = " + str(product.id)
 
@@ -136,20 +134,16 @@ class database_sql():
         request = request[0:-2] + ' FROM Product '
         request += ' WHERE id = '
         request += str(product_id)
-        rows = []
 
         self.cursor.execute(request)
-        rows = self.cursor.fetchall()
+        row = self.cursor.fetchone()
 
-        products = []
-        for row in rows:
-            values_dict = {}
-            for i in xrange(len(columns)):
-                values_dict[columns[i]] = row[i]
-            product = Product()
-            product.set_values(values_dict)
-            products.append(product)
-        return products
+        product = Product()
+        values_dict = {}
+        for i in xrange(len(columns)):
+            values_dict[columns[i]] = row[i]
+        product.set_values(values_dict)
+        return product
 
     def load_products(self):
         columns = Product().to_dict().keys()
@@ -284,7 +278,10 @@ class database_sql():
         self.cursor.execute("SELECT COUNT(*) FROM Product")
         count = self.cursor.fetchone()[0]
         
-        request = 'SELECT * from Product'
+        request = 'SELECT '
+        for column in columns:
+            request += column + ', '
+        request = request[0:-2] + ' FROM Product '
         rows = []
         if (int(count) > int(number_of_products)):
             request += ' OFFSET RANDOM() * '
@@ -382,7 +379,7 @@ class database_sql():
             ad = Ad()
             ad.set_values(values_dict)
             ads.append(ad)
-        return ads
+        return ads[0]
 
     def delete_ad(self, ad_id):
         self.cursor.execute("DELETE from Ad where id = %s" % ad_id)
@@ -482,8 +479,6 @@ class database_sql():
         request = 'UPDATE Orders SET '
         for key in keys:
             request += key + '=' + self.f + ', '
-            if (type(parameters[key]).__name__=='list'):
-                parameters[key] = 'ARRAY' + parameters[key]
         request = request[0:-2]
         request += " WHERE id = " + str(order.id)
     

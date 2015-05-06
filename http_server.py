@@ -325,6 +325,15 @@ def contacts():
         print traceback.format_exc()
         return '<pre>' + traceback.format_exc() + '</pre>'
 
+@http_server.route("/delivery.html", methods=['GET', 'POST'])
+def delivery():
+    try:
+        return website.delivery_page()
+    except Exception, e:
+        print traceback.format_exc()
+        return '<pre>' + traceback.format_exc() + '</pre>'
+
+
 @http_server.route("/drop_database", methods=['GET', 'POST'])
 def drop_db():
     try:
