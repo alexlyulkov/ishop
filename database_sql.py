@@ -58,6 +58,18 @@ class database_sql():
             request += "(id SERIAL UNIQUE, bytes bytea)"
             self.cursor.execute(request)
             self.db.commit()
+            
+            columns = Order().to_dict()
+            del columns['id']
+            request = 'CREATE TABLE IF NOT EXISTS Order '
+            request += "(id SERIAL UNIQUE"
+            for column, value in columns.items():
+                request += ', ' + column + ' ' + \
+                           sql_types[type(value).__name__]
+            request += ")"
+            self.cursor.execute(request)
+            self.db.commit()
+            
         except Exception as e:
             print e
 
@@ -375,3 +387,88 @@ class database_sql():
             print("Total rows deleted: %s" % self.cursor.rowcount)
         except Exception as e:
             print e
+
+    def add_order(self, order):
+        parameters = order.to_dict()
+        del parameters['id']
+        keys = parameters.keys()
+        request = 'INSERT INTO Order ('
+        for key in keys:
+            request += key + '=' + self.f + ', '
+        request = request[0:-2]
+        request += ')'
+        val = ""
+        try:
+            self.cursor.execute(request, parameters.values())
+            self.cursor.execute("SELECT LASTVAL()")
+            val = self.cursor.fetchone()[1]
+            self.db.commit()
+        except Exception as e:
+            print e  
+            return None
+        return val
+
+    def update_order(self, order):
+        parameters = order.to_dict().keys():
+        request = 'UPDATE Order SET '
+        for column in parameters:
+            request += column + '=' + self.f + ', '
+        
+        request = request[0:-2]
+        request += " WHERE id = " + str(order.id)
+        try:
+            self.cursor.execute(request, parameters.values())
+            self.db.commit()
+        except Exception as e:
+            print e
+        
+    def load_order(self, order_id):
+
+        columns = Order().to_dict().keys()
+        request = 'SELECT '
+        for column in columns:
+            request += column + ', '
+        request = request[0:-2] + ' FROM Order '
+
+        try:
+            self.cursor.execute(request)
+            rows = self.cursor.fetchall()
+
+        except Exception as e:
+            print e
+            rows = []
+
+        orders = []
+        for row in rows:
+            values_dict = {}
+            for i in xrange(len(columns)):
+                values_dict[columns[i]] = row[i]
+            order = Order()
+            order.set_values(values_dict)
+            orders.append(order)
+        return orders
+
+    def get_all_orders(self):
+        columns = Order().to_dict().keys()
+        request = 'SELECT '
+        for column in columns:
+            request += column + ', '
+        request = request[0:-2] + ' FROM Order '
+
+        try:
+            self.cursor.execute(request)
+            rows = self.cursor.fetchall()
+
+        except Exception as e:
+            print e
+            rows = []
+
+        order = []
+        for row in rows:
+            values_dict = {}
+            for i in xrange(len(columns)):
+                values_dict[columns[i]] = row[i]
+            order = Order()
+            order.set_values(values_dict)
+            orders.append(order)
+        return orders
