@@ -1,1 +1,1 @@
-web: sh -c 'gunicorn main:app'
+web: weitress-serve --port:$PORT main:app
