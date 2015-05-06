@@ -3,7 +3,7 @@ sql_types = {'int':'INTEGER', 'long':'INTEGER', 'str':'TEXT', 'unicode':'TEXT', 
 from classes import Product, Ad, Category, Image
 import psycopg2
 import traceback
-#from random import randrange
+from random import randrange
 
 class database_sql():
     def __init__(self):
@@ -75,8 +75,37 @@ class database_sql():
         except Exception as e:
             print e
 
-    def save_product(self, product):
+    def add_product(self, product):
+        try:
+            self.cursor.execute('SELECT max(id) FROM Product')
+            max_id = self.cursor.fetchone()[0]
+        except Exception as e:
+            print e
+            print traceback.format_exc()
+            max_id = None
+            
+        if max_id == None:
+            max_id = 0
+        new_id = max_id + 1
+        product.id = new_id
+        
+        parameters = product.to_dict()
+        keys = parameters.keys()
+        request = 'INSERT INTO Product ('
+        for key in keys:
+            request += key + '=' + self.f + ', '
+        request = request[0:-2]
+        request += ')'
+        
+        try:
+            self.cursor.execute(request, parameters.values())
+            self.db.commit()
+        except Exception as e:
+            print e  
+            return None
+        return new_id
 
+    def update_product(self, product):
         parameters = product.to_dict().keys():
         request = 'UPDATE Product SET '
         for column in parameters:
@@ -125,8 +154,38 @@ class database_sql():
         except Exception as e:
             print e
 
-    def add_category(self, category):
 
+    def add_category(self, category):
+        try:
+            self.cursor.execute('SELECT max(id) FROM Category')
+            max_id = self.cursor.fetchone()[0]
+        except Exception as e:
+            print e
+            print traceback.format_exc()
+            max_id = None
+            
+        if max_id == None:
+            max_id = 0
+        new_id = max_id + 1
+        category.id = new_id
+        
+        parameters = category.to_dict()
+        keys = parameters.keys()
+        request = 'INSERT INTO Category ('
+        for key in keys:
+            request += key + '=' + self.f + ', '
+        request = request[0:-2]
+        request += ')'
+        
+        try:
+            self.cursor.execute(request, parameters.values())
+            self.db.commit()
+        except Exception as e:
+            print e  
+            return None
+        return new_id
+        
+    def update_category(self, category):
         parameters = category.to_dict().keys():
         request = 'UPDATE Category SET '
         for column in parameters:
@@ -141,7 +200,6 @@ class database_sql():
             print e
 
     def load_category(self, category_id):
-
         columns = Employee().to_dict().keys()
         request = 'SELECT '
         for column in columns:
@@ -194,25 +252,60 @@ class database_sql():
         return categories
 
     def get_random_products(self, number_of_products):
-        pass
-        #try:
-        #    self.cursor.execute("SELECT * from Products")
-        #    count = self.cursor.rowcount
-        #    rows = self.cursor.fetchall()
 
+        if (int(max_id) < int(number_of_product)):
+            return None
 
-        #    for i in xrange(number_of_products)
+        request = 'SELECT * from Product OFFSET RANDOM() * (CELECT COUNT(*) FROM Product) LIMIT '
+        request += int(number_of_products)
+        try:
+            self.cursor.execute(request)
+            rows = self.cursor.fetchall()
+        except Exception as e:
+            print e
+            rows = []
 
-        #    for n in number_of_products:
-        #        random.randrange(1, count)
-
-        #except Exception as e:
-        #    print e
-
-
-        #return (Product() for i in xrange(number_of_products))
+        products = []
+        for row in rows:
+            values_dict = {}
+            for i in xrange(len(columns)):
+                values_dict[columns[i]] = row[i]
+            product = Product()
+            product.set_values(values_dict)
+            products.append(product)
+        return products
 
     def add_ad(self, ad):
+        try:
+            self.cursor.execute('SELECT max(id) FROM Ad')
+            max_id = self.cursor.fetchone()[0]
+        except Exception as e:
+            print e
+            print traceback.format_exc()
+            max_id = None
+            
+        if max_id == None:
+            max_id = 0
+        new_id = max_id + 1
+        ad.id = new_id
+        
+        parameters = ad.to_dict()
+        keys = parameters.keys()
+        request = 'INSERT INTO Ad ('
+        for key in keys:
+            request += key + '=' + self.f + ', '
+        request = request[0:-2]
+        request += ')'
+        
+        try:
+            self.cursor.execute(request, parameters.values())
+            self.db.commit()
+        except Exception as e:
+            print e  
+            return None
+        return new_id
+
+    def update_ad(self, ad):
         parameters = ad.to_dict().keys():
         request = 'UPDATE Ad SET '
         for column in parameters:
@@ -259,7 +352,37 @@ class database_sql():
             ads.append(ad)
         return ads
 
-    def save_image(self, image):
+    def add_image(self, image):
+        try:
+            self.cursor.execute('SELECT max(id) FROM Image')
+            max_id = self.cursor.fetchone()[0]
+        except Exception as e:
+            print e
+            print traceback.format_exc()
+            max_id = None
+            
+        if max_id == None:
+            max_id = 0
+        new_id = max_id + 1
+        image.id = new_id
+        
+        parameters = image.to_dict()
+        keys = parameters.keys()
+        request = 'INSERT INTO Image ('
+        for key in keys:
+            request += key + '=' + self.f + ', '
+        request = request[0:-2]
+        request += ')'
+        
+        try:
+            self.cursor.execute(request, parameters.values())
+            self.db.commit()
+        except Exception as e:
+            print e  
+            return None
+        return new_id
+
+    def update_image(self, image):
 
         parameters = image.to_dict().keys():
         request = 'UPDATE Image SET '
