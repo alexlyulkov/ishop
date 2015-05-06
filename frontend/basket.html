@@ -96,9 +96,14 @@
             </div>
 
             <div class="col-lg-9 col-md-9 col-sm-6 col-xs-6">
-				<h1>Корзина</h1>
+				<form class="form-container" action="/ordering/" method="post">
+					<h1>
+						Корзина
+						<button class="btn btn-default buyButton pull-right" type="submit">Оформить заказ</button>
+					</h1>
+				</form>
 				<div class="container">
-					<form class="form-container" action="#" method="post">
+					<form class="form-container" action="/delete_from_cart/" method="post">
 						<table class="table table-stripped">
 							<tr>
 								<th>Название товара</th>
@@ -110,7 +115,8 @@
 									<td>{{ item.name }}</td>
 									<td>{{ item.price }}</td>
 									<td>
-										<input type="checkbox" name="delete" value="">
+										<!-- <input type="checkbox" name="delete" value=""> -->
+										<input type="checkbox" name="{{ item.id }}" value="">
 									</td>
 								</tr>
 							{% endfor %}
