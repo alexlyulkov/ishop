@@ -97,12 +97,16 @@
 				  <td class="form-title" align="right">Описание: </td>
 				  <td align="left"><input class="form-field" required type="text" name="description" value="{{ product.description }}"></td>
 				</tr>
+				<tr>          
+				  <td class="form-title" align="right">Цена: </td>
+				  <td align="left"><input class="form-field" required type="number" name="price" value="{{ product.price }}"></td>
+				</tr>
 			</table>
 			<input class="btn btn-default" align="center" type="submit" value="Сохранить">
 		</form>
 		<h1></h1>
-		<form class="form-container" action="#" method="post" >
-		<div class="form-title" align="center"><h2>Товары</h2></div>
+		<button class="btn btn-default" type="button"> <a href="/delete_product/{{ item.id }}"></a>Удалить</button>
+		<!-- <div class="form-title" align="center"><h2>Товары</h2></div>
 			<table class="table table-stripped">
 				<tr>
 					<th>Категория</th>
@@ -116,15 +120,12 @@
 						<td>{{ item.brand }}</td>
 						<td>{{ item.name }}</td>
 						<td>
-							<input type="checkbox" name="delete" value="">
+							<button class="btn btn-default" type="button"> <a href="/delete_product/{{ item.id }}"></a>X</button>
 						</td>
 					</tr>
 				{% endfor %}
 			</table>
-			<input class="btn btn-default" type="submit" value="Удалить товары">
-		</form>
-
-	</div>
+	<!-- </div> --> 
 
     <div class="container">
 

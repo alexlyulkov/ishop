@@ -89,7 +89,7 @@
 			<input class="btn btn-default" align="center" type="submit" value="Сохранить">
 		</form>
 		<h1></h1>
-		<form class="form-container" action="#" method="post">
+
 		<div class="form-title" align="center"><h2>Текущие Акции</h2></div>
 			<table class="table table-stripped">
 				<tr>
@@ -100,13 +100,11 @@
 					<tr>
 						<td>{{ ad.name }}</td>
 						<td>
-							<input type="checkbox" name="delete" value="">
+							<button class="btn btn-default" type="button"> <a href="/delete_ad/{{ ad.id }}"></a>X</button>
 						</td>
 					</tr>
 				{% endfor %}
 			</table>
-			<input class="btn btn-default" type="submit" value="Удалить акции">
-		</form>
 
 	</div>
 
