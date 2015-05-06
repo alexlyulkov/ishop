@@ -3,6 +3,7 @@ sql_types = {'int':'INTEGER', 'long':'INTEGER', 'str':'TEXT', 'unicode':'TEXT', 
 from classes import *
 import psycopg2
 import traceback
+import base64
 
 class database_sql():
     def __init__(self):
@@ -34,7 +35,7 @@ class database_sql():
         columns = Image().to_dict()
         del columns['id']
         request = 'CREATE TABLE IF NOT EXISTS Image '
-        request += "(id SERIAL UNIQUE, bytes bytea)"
+        request += "(id SERIAL UNIQUE, bytes TEXT)"
         self.cursor.execute(request)
         self.db.commit()
             
@@ -77,7 +78,7 @@ class database_sql():
     def cleanup_db(self):
         try:
             self.cursor.execute("DROP TABLE IF EXISTS Orders")
-            self.cursor.execute("DROP TABLE IF EXISTS Poduct")
+            self.cursor.execute("DROP TABLE IF EXISTS Product")
             self.cursor.execute("DROP TABLE IF EXISTS Ad")
             self.cursor.execute("DROP TABLE IF EXISTS Image")
             self.cursor.execute("DROP TABLE IF EXISTS Category")
@@ -90,21 +91,28 @@ class database_sql():
         del parameters['id']
         keys = parameters.keys()
         request = 'INSERT INTO Product ('
-        for key in keys:
+        for column in parameters.keys():
+            request += column + ', '
+        request = request[0:-2] + ') VALUES ('
+        
+        for column in parameters.keys():
+            request += self.f + ','
+        request = request[0:-1] + ')'
+        '''for key in keys:
             request += key + '=' + self.f + ', '
     
             if (type(parameters[key]).__name__=='list'):
                 parameters[key] = 'ARRAY' + parameters[key]
                 
         request = request[0:-2]
-        request += ')'
+        request += ')'''
         val = ""
 
         self.cursor.execute(request, parameters.values())
-        self.cursor.execute("SELECT LASTVAL()")
-        val = self.cursor.fetchone()[1]
+        #self.cursor.execute("SELECT LASTVAL()")
+        #val = self.cursor.fetchone()[1]
         self.db.commit()
-        return val
+        #return val
 
     def update_product(self, product):
         parameters = product.to_dict()
@@ -127,7 +135,7 @@ class database_sql():
             request += column + ', '
         request = request[0:-2] + ' FROM Product '
         request += ' WHERE id = '
-        request += product_id
+        request += str(product_id)
         rows = []
 
         self.cursor.execute(request)
@@ -165,7 +173,7 @@ class database_sql():
         return products
 
     def delete_product(self, product_id):
-        self.cursor.execute("DELETE from Product where Id = %s" % product_id)
+        self.cursor.execute("DELETE from Product where id = %s" % product_id)
         self.db.commit()
 
 
@@ -175,17 +183,20 @@ class database_sql():
         del parameters['id']
         keys = parameters.keys()
         request = 'INSERT INTO Category ('
-        for key in keys:
-            request += key + '=' + self.f + ', '
-        request = request[0:-2]
-        request += ')'
+        for column in parameters.keys():
+            request += column + ', '
+        request = request[0:-2] + ') VALUES ('
+        
+        for column in parameters.keys():
+            request += self.f + ','
+        request = request[0:-1] + ')'
         val = ""
 
         self.cursor.execute(request, parameters.values())
-        self.cursor.execute("SELECT LASTVAL()")
-        val = self.cursor.fetchone()[1]
+        #self.cursor.execute("SELECT LASTVAL()")
+        #val = self.cursor.fetchone()[1]
         self.db.commit()
-        return val
+        #return val
         
     def update_category(self, category):
         parameters = category.to_dict()
@@ -207,7 +218,7 @@ class database_sql():
             request += column + ', '
         request = request[0:-2] + ' FROM Product '
         request += ' WHERE category = '
-        request += category_id
+        request += str(category_id)
         rows = []
 
         self.cursor.execute(request)
@@ -251,7 +262,7 @@ class database_sql():
             request += column + ', '
         request = request[0:-2] + ' FROM Category '
         request += ' WHERE id = '
-        request += category_id
+        request += str(category_id)
         rows = []
 
         self.cursor.execute(request)
@@ -271,11 +282,11 @@ class database_sql():
     def get_random_products(self, number_of_products):
         columns = Product().to_dict().keys()
         self.cursor.execute("SELECT COUNT(*) FROM Product")
-        count = self.cursor.fetchone()[1]
+        count = self.cursor.fetchone()[0]
         
         request = 'SELECT * from Product'
         rows = []
-        if (int(count) > int(number_of_product)):
+        if (int(count) > int(number_of_products)):
             request += ' OFFSET RANDOM() * '
             request += count
             request += ' LIMIT '
@@ -301,17 +312,20 @@ class database_sql():
         del parameters['id']
         keys = parameters.keys()
         request = 'INSERT INTO Ad ('
-        for key in keys:
-            request += key + '=' + self.f + ', '
-        request = request[0:-2]
-        request += ')'
+        for column in parameters.keys():
+            request += column + ', '
+        request = request[0:-2] + ') VALUES ('
+        
+        for column in parameters.keys():
+            request += self.f + ','
+        request = request[0:-1] + ')'
         val = ""
 
         self.cursor.execute(request, parameters.values())
-        self.cursor.execute("SELECT LASTVAL()")
-        val = self.cursor.fetchone()[1]
+        #self.cursor.execute("SELECT LASTVAL()")
+        #val = self.cursor.fetchone()[1]
         self.db.commit()
-        return val
+        #return val
 
     def update_ad(self, ad):
         parameters = ad.to_dict()
@@ -354,7 +368,7 @@ class database_sql():
             request += column + ', '
         request = request[0:-2] + ' FROM Ad '
         request += ' WHERE id = '
-        request += ad_id
+        request += str(ad_id)
         rows = []
         
         self.cursor.execute(request)
@@ -376,19 +390,24 @@ class database_sql():
         
 
     def add_image(self, image):
+        #print image.bytes
         parameters = image.to_dict()
         del parameters['id']
+        #parameters['bytes'] = psycopg2.Binary(images.bytes)
         keys = parameters.keys()
         request = 'INSERT INTO Image ('
         for key in keys:
             request += key + '=' + self.f + ', '
         request = request[0:-2]
         request += ')'
+        request = "INSERT INTO Image(bytes) VALUES (%s) RETURNING id"
         val = ""
 
-        self.cursor.execute(request, parameters.values())
-        self.cursor.execute("SELECT LASTVAL()")
-        val = self.cursor.fetchone()[1]
+        #self.cursor.execute(request, parameters.values())
+        self.cursor.execute(request, (base64.b64encode(image.bytes),))
+        #self.cursor.execute("SELECT LASTVAL()")
+        val = self.cursor.fetchone()
+        val = val[0]
         self.db.commit()
             
         return val
@@ -411,6 +430,8 @@ class database_sql():
         for column in columns:
             request += column + ', '
         request = request[0:-2] + ' FROM Image '
+        request += ' WHERE id = '
+        request += str(image_id)
         row = []
 
         self.cursor.execute(request)
@@ -419,6 +440,7 @@ class database_sql():
         values_dict = {}
         for i in xrange(len(columns)):
             values_dict[columns[i]] = row[i]
+        values_dict['bytes'] = base64.b64decode(values_dict['bytes'])
         ad = Ad()
         ad.set_values(values_dict)
         return ad
@@ -432,17 +454,24 @@ class database_sql():
         del parameters['id']
         keys = parameters.keys()
         request = 'INSERT INTO Orders ('
-        for key in keys:
+        for column in parameters.keys():
+            request += column + ', '
+        request = request[0:-2] + ') VALUES ('
+        
+        for column in parameters.keys():
+            request += self.f + ','
+        request = request[0:-1] + ') RETURNING id'
+        '''for key in keys:
             request += key + '=' + self.f + ', '
             if (type(parameters[key]).__name__=='list'):
                 parameters[key] = 'ARRAY' + parameters[key]
         request = request[0:-2]
-        request += ')'
+        request += ') RETURNING id'''
         val = ""
 
         self.cursor.execute(request, parameters.values())
-        self.cursor.execute("SELECT LASTVAL()")
-        val = self.cursor.fetchone()[1]
+        #self.cursor.execute("SELECT LASTVAL()")
+        val = self.cursor.fetchone()[0]
         self.db.commit()
         
         return val
@@ -516,7 +545,7 @@ class database_sql():
             request += column + ', '
         request = request[0:-2] + ' FROM Orders '
         request += ' WHERE id = '
-        request += order_id
+        request += str(order_id)
         rows = []
 
         self.cursor.execute(request)

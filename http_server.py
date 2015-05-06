@@ -15,7 +15,7 @@ http_server.debug = True
 # This is the path to the upload directory
 http_server.config['UPLOAD_FOLDER'] = 'uploads/'
 # These are the extension that we are accepting to be uploaded
-http_server.config['ALLOWED_EXTENSIONS'] = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+http_server.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg', 'gif'])
 
 db = None
 
@@ -26,7 +26,7 @@ def get_images(filename):
         return http_server.send_static_file('frontend/images/' + filename)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 @http_server.route("/css/<filename>")
 def get_css(filename):
@@ -34,7 +34,7 @@ def get_css(filename):
         return http_server.send_static_file('frontend/css/' + filename)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 @http_server.route("/fonts/<filename>")
 def get_font(filename):
@@ -42,7 +42,7 @@ def get_font(filename):
         return http_server.send_static_file('frontend/fonts/' + filename)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 @http_server.route("/js/<filename>")
 def get_js(filename):
@@ -50,7 +50,7 @@ def get_js(filename):
         return http_server.send_static_file('frontend/js/' + filename)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 
 @http_server.route("/")
@@ -59,17 +59,16 @@ def index_page():
         return website.index_page()
     except Exception, e:
         print traceback.format_exc()
-        print e
-        return traceback.format_exc() + '\n\n' + str(e)
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 
 @http_server.route("/image/<int:image_id>")
 def get_image(image_id):
     try:
-        if image_id == 1:
+        '''if image_id == 1:
             return http_server.send_static_file('frontend/images/product1.jpg')
         if image_id == 2:
-            return http_server.send_static_file('frontend/images/ad1.jpg')
+            return http_server.send_static_file('frontend/images/ad1.jpg')'''
 
         image = db.get_image(image_id)
         return send_file(io.BytesIO(image.bytes),
@@ -77,7 +76,7 @@ def get_image(image_id):
                      mimetype='image/png')
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 @http_server.route("/product/<int:product_id>", methods=['GET', 'POST'])
 def product_page(product_id):
@@ -103,7 +102,7 @@ def cart_page():
         return website.cart_page()
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 @http_server.route("/add_to_cart/<int:product_id>", methods=['GET', 'POST'])
 def add_to_cart(product_id):
@@ -111,7 +110,7 @@ def add_to_cart(product_id):
         return website.add_to_cart(product_id)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 @http_server.route("/delete_from_cart/<int:product_id>", methods=['GET', 'POST'])
 def delete_from_cart(product_id):
@@ -119,7 +118,7 @@ def delete_from_cart(product_id):
         return website.delete_from_cart(product_id)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 @http_server.route("/ordering", methods=['GET', 'POST'])
 def ordering():
@@ -127,7 +126,7 @@ def ordering():
         return website.ordering_page()
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 @http_server.route("/make_order", methods=['GET', 'POST'])
 def make_order():
@@ -136,7 +135,7 @@ def make_order():
         return website.make_order(values)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 
 
@@ -150,7 +149,7 @@ def add_product():
 
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 
 #@http_server.route("/modify_product/<int:product_id>", methods=['GET', 'POST'])
@@ -170,27 +169,27 @@ def save_product():
                      mimetype='image/png')
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 '''
 
 @http_server.route("/new_category", methods=['GET', 'POST'])
 @website_authorization.requires_auth
 def new_category():
     try:
-        return website.edit_category()
+        return website.edit_category_page()
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 
 @http_server.route("/modify_category/<int:category_id>", methods=['GET', 'POST'])
 @website_authorization.requires_auth
 def modify_category(category_id):
     try:
-        return website.edit_category(category_id)
+        return website.edit_category_page(category_id)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 
 @http_server.route("/save_category", methods=['GET', 'POST'])
@@ -201,26 +200,26 @@ def save_category():
         return website.save_category(values)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 @http_server.route("/new_ad", methods=['GET', 'POST'])
 @website_authorization.requires_auth
 def new_ad():
     try:
-        return website.edit_ad()
+        return website.edit_ad_page()
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 
 @http_server.route("/modify_ad/<int:ad_id>", methods=['GET', 'POST'])
 @website_authorization.requires_auth
 def modify_ad(ad_id):
     try:
-        return website.edit_ad(ad_id)
+        return website.edit_ad_page(ad_id)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 
 @http_server.route("/save_ad", methods=['GET', 'POST'])
@@ -232,36 +231,36 @@ def save_ad():
         return website.save_ad(values, uploaded_files)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 @http_server.route("/delete_ad/<int:ad_id>", methods=['GET', 'POST'])
 @website_authorization.requires_auth
 def delete_ad(ad_id):
     try:
-        return website.edit_ad(delete_id)
+        return website.delete_ad(ad_id)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 
 @http_server.route("/new_product", methods=['GET', 'POST'])
 @website_authorization.requires_auth
 def new_product():
     try:
-        return website.edit_product()
+        return website.edit_product_page()
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 
 @http_server.route("/modify_product/<int:product_id>", methods=['GET', 'POST'])
 @website_authorization.requires_auth
 def modify_product(product_id):
     try:
-        return website.edit_product(product_id)
+        return website.edit_product_page(product_id)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 
 @http_server.route("/save_product", methods=['GET', 'POST'])
@@ -273,7 +272,7 @@ def save_product():
         return website.save_product(values, uploaded_files)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 @http_server.route("/delete_product/<int:product_id>", methods=['GET', 'POST'])
 @website_authorization.requires_auth
@@ -282,7 +281,7 @@ def delete_product(product_id):
         return website.delete_product(product_id)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 
 
@@ -295,7 +294,7 @@ def orders():
         return website.orders()
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 @http_server.route("/order/<int:order_id>", methods=['GET', 'POST'])
 @website_authorization.requires_auth
@@ -304,7 +303,7 @@ def order(order_id):
         return website.order(order_id)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 @http_server.route("/delete_order/<int:order_id>", methods=['GET', 'POST'])
 @website_authorization.requires_auth
@@ -313,16 +312,26 @@ def delete_order(order_id):
         return website.delete_order(order_id)
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
 
 
 
 
-@http_server.route("/contatcs", methods=['GET', 'POST'])
+@http_server.route("/contactUs.html", methods=['GET', 'POST'])
 def contacts():
     try:
         return website.contact_us_page()
     except Exception, e:
         print traceback.format_exc()
-        print e
+        return '<pre>' + traceback.format_exc() + '</pre>'
+
+@http_server.route("/drop_database", methods=['GET', 'POST'])
+def drop_db():
+    try:
+        db.cleanup_db()
+        return "Database was cleaned"
+    except Exception, e:
+        print traceback.format_exc()
+        return '<pre>' + traceback.format_exc() + '</pre>'
+
 

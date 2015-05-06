@@ -7,21 +7,28 @@ db = None
 def save_images(files):
     images_ids = []
     for f in files:
-        image = db.add_image(f.read())
-        images_ids.append(image.id)
-    return image_ids
+        image = Image()
+        image.bytes = f.read()
+        image_id = db.add_image(image)
+        images_ids.append(image_id)
+    return images_ids
     
 def edit_ad_page(ad_id = None):
     ad = Ad()
     if ad_id != None:
         ad = db.load_ad(ad_id)
+
+    ads = db.load_ads()
         
     return render_template("addAd.html",
                            ad = ad,
-                           categories = db.load_categories())
+                           categories = db.load_categories(),
+                           ads = ads)
 
 def save_ad(values, images):
-    values['image_id'] += save_images(values['files'])[0]
+    values['id'] = int(values['id'])
+    print images
+    values['image_id'] = save_images(images)[0]
     ad = Ad(values)
     if ad.id == -1:
         db.add_ad(ad)
@@ -44,10 +51,12 @@ def edit_product_page(product_id = None):
         
     return render_template("addProduct.html",
                            product = product,
-                           categories = db.get_categories())
+                           categories = db.load_categories())
 
 def save_product(values, images):
-    values['images_ids'] = save_images(values['files'])
+    values['id'] = int(values['id'])
+    values['category'] = int(values['category'])
+    values['images_ids'] = save_images(images)
     product = Product(values)
     if product.id == -1:
         db.add_product(product)
@@ -70,9 +79,11 @@ def edit_category_page(category_id = None):
         
     return render_template("addCategory.html",
                            category = category,
-                           categories = db.get_categories())
+                           categories = db.load_categories())
 def save_category(values):
+    values['id'] = int(values['id'])
     category = Category(values)
+    print 'save category:', category.to_dict()
     if category.id == -1:
         db.add_category(category)
     else:
@@ -101,9 +112,10 @@ def delete_category(category_id):
 
 
 def index_page():
-    categories = db.get_categories()
+    categories = db.load_categories()
+    print categories
     randomProducts = db.get_random_products(10)
-    ads = db.get_all_ads()
+    ads = db.load_ads()
     
     return render_template('index.html',
                            categories = categories,
@@ -112,7 +124,7 @@ def index_page():
 
 
 def category_page(category_id):
-    categories = db.get_categories()
+    categories = db.load_categories()
     products = db.load_category_products(categoty_id)
 
     return render_template('category.html',
@@ -120,7 +132,7 @@ def category_page(category_id):
                            products = products)
 
 def product_page(product_id):
-    categories = db.get_categories()
+    categories = db.load_categories()
     product = db.load_product(product_id)
 
     return render_template('product.html',
@@ -128,12 +140,12 @@ def product_page(product_id):
                            product = product)
 
 def contact_us_page():
-    categories = db.get_categories()
+    categories = db.load_categories()
     return render_template('contactUs.html',
                            categories = categories)
 
 def ordering_page():
-    categories = db.get_categories()
+    categories = db.load_categories()
     return render_template('ordering.html',
                            categories = categories)
 
@@ -203,7 +215,7 @@ def cart_page():
     for p in products:
         cost += p.price
     return render_template('basket.html',
-                           categories = db.get_categories,
+                           categories = db.load_categories,
                            boughtItems = products,
                            priceSum = cost)
 

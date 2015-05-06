@@ -2,8 +2,8 @@ from hashlib import sha256
 
 class Category():
     def __init__(self, init_values = None):
-        self.id = 1
-        self.name = 'category1'
+        self.id = -1
+        self.name = ""
         if init_values != None:
             for key in init_values.keys():
                 setattr(self, key, init_values[key])
@@ -66,9 +66,9 @@ class Image():
 class Order():
     def __init__(self, init_values = None):
         self.id = 1
-        self.name = ''
-        self.phone = ''
-        self.address = ''
+        self.name = ""
+        self.phone = ""
+        self.address = ""
         self.products = []
         if init_values != None:
             for key in init_values.keys():

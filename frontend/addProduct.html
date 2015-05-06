@@ -73,7 +73,7 @@
             <!-- /.navbar-collapse -->
     <!-- Page Content -->
     <div class="container">
-		<form class="form-container" action="/save_product/" method="post" enctype="multipart/form-data">
+		<form class="form-container" action="/save_product" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="id" value="{{ product.id }}">
 			<div class="form-title" align="center"><h2>Новый товар</h2></div>
 			<table class="table table-bordered"align="center">
@@ -81,7 +81,7 @@
 				  <td class="form-title" align="right">Категория: </td>
 				  <!-- <td align="left"><input class="form-field" required type="number" name="category" value="{{ product.category }}"></td> -->
 				  <td>
-					  <select required>
+					  <select required name = category>
 						  {% for category in categories %}
 							<option value="{{ category.id }}">{{ category.name }}</option>
 						  {% endfor %}
@@ -90,7 +90,7 @@
 				</tr>
 				<tr>          
 				  <td class="form-title" align="right">Бренд: </td>
-				  <td align="left"><input class="form-field" required type="number" name="brand" value="{{ product.brand }}"></td>
+				  <td align="left"><input class="form-field" required type="text" name="brand" value="{{ product.brand }}"></td>
 				</tr>
 				<tr>          
 				  <td class="form-title" align="right">Название: </td>
@@ -112,7 +112,7 @@
 			<input class="btn btn-default" align="center" type="submit" value="Сохранить">
 		</form>
 		<h1></h1>
-		<button class="btn btn-default" type="button"> <a href="/delete_product/{{ item.id }}"></a>Удалить</button>
+		<button class="btn btn-default" type="button"> <a href="/delete_product/{{ product.id }}"></a>Удалить</button>
 		<!-- <div class="form-title" align="center"><h2>Товары</h2></div>
 			<table class="table table-stripped">
 				<tr>
