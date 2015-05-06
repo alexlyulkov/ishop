@@ -11,18 +11,40 @@ def save_images(files):
         images_ids.append(image.id)
     return image_ids
     
+def edit_ad_page(ad_id = None):
+    ad = Ad()
+    if ad_id != None:
+        ad = db.load_ad(ad_id)
+        
+    return render_template("addAd.html",
+                           ad = ad,
+                           categories = db.load_categories())
 
 def save_ad(values, images):
-    values['image_id'] = save_images(values['files'])[0]
+    values['image_id'] += save_images(values['files'])[0]
     ad = Ad(values)
     if ad.id == -1:
         db.add_ad(ad)
     else:
         db.update_ad(ad)
 
-    return render_template('index.html',
-                           categories = db.get_categories,
-                           productItemsAds = db.get_random_products)
+    return redirect("/")
+    
+def delete_ad(ad_id):
+    ad = db.load_ad(ad_id)
+    db.delete_image(ad.image_id)
+    db.delete_ad(ad_id)
+    return redirect("/")
+
+
+def edit_product_page(product_id = None):
+    product = Product()
+    if product_id != None:
+        product = db.load_product(product_id)
+        
+    return render_template("addProduct.html",
+                           product = product,
+                           categories = db.get_categories())
 
 def save_product(values, images):
     values['images_ids'] = save_images(values['files'])
@@ -32,31 +54,48 @@ def save_product(values, images):
     else:
         db.update_product(product)
 
-    return render_template('index.html',
-                           categories = db.get_categories,
-                           productItemsAds = db.get_random_products)
+    return redirect("/")
 
+def delete_product(product_id):
+    product = db.load_product(product_id)
+    for img_id in product.images_ids:
+        db.delete_image(img_id)
+    db.delete_product(product_id)
+    return redirect("/")
+
+def edit_category_page(category_id = None):
+    category = Category()
+    if category_id != None:
+        category = db.load_category(category_id)
+        
+    return render_template("addCategory.html",
+                           category = category,
+                           categories = db.get_categories())
 def save_category(values):
     category = Category(values)
     if category.id == -1:
-        db.add_category(categoty)
+        db.add_category(category)
     else:
-        db.update_category(categoty)
+        db.update_category(category)
 
-    return render_template('index.html',
-                           categories = db.get_categories,
-                           productItemsAds = db.get_random_products)
+    return redirect("/")
 
-def save_order(values):
+def delete_category(category_id):
+    products = db.load_category_products(category_id)
+    for product in products:
+        db.delete_product(product.id)
+    db.delete_category(category_id)
+    
+    return redirect("/")
+
+'''def save_order(values):
     order = Order(values)
     if order.id == -1:
-        db.add_order(categoty)
+        db.add_order(category)
     else:
         db.update_order(categoty)
 
-    return render_template('index.html',
-                           categories = db.get_categories,
-                           productItemsAds = db.get_random_products)
+    return redirect("/")'''
 
 
 
@@ -74,7 +113,7 @@ def index_page():
 
 def category_page(category_id):
     categories = db.get_categories()
-    products = db.load_category(categoty_id)
+    products = db.load_category_products(categoty_id)
 
     return render_template('category.html',
                            categories = categories,
@@ -97,6 +136,17 @@ def ordering_page():
     categories = db.get_categories()
     return render_template('ordering.html',
                            categories = categories)
+
+def make_order(values):
+    cart = json.loads(request.cookies.get('cart'))
+    order = Order(values)
+    order.products = cart
+    order_id = db.add_order(order)
+    order.id = order_id
+    return render_template('orderSuccess.html',
+                           categories = db.load_categories(),
+                           order = order)
+    
 
 def add_to_cart(product_id):
     cart = request.cookies.get('cart')
@@ -131,9 +181,13 @@ def cart_page():
     else:
         cart = []
     products = [db.load_product(product_id) for product_id in cart]
+    cost = 0
+    for p in products:
+        cost += p.price
     return render_template('basket.html',
                            categories = db.get_categories,
-                           boughtItems = products)
+                           boughtItems = products,
+                           priceSum = cost)
 
 
                            
