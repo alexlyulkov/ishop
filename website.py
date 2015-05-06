@@ -41,7 +41,7 @@ def delete_ad(ad_id):
     ad = db.load_ad(ad_id)
     db.delete_image(ad.image_id)
     db.delete_ad(ad_id)
-    return redirect("/")
+    return redirect("/new_ad")
 
 
 def edit_product_page(product_id = None):
@@ -97,7 +97,7 @@ def delete_category(category_id):
         db.delete_product(product.id)
     db.delete_category(category_id)
     
-    return redirect("/")
+    return redirect("/new_category")
 
 '''def save_order(values):
     order = Order(values)
