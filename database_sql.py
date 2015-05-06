@@ -1,4 +1,4 @@
-sql_types = {'int':'INTEGER', 'long':'INTEGER', 'str':'TEXT', 'unicode':'TEXT', 'float':'REAL'}
+sql_types = {'int':'INTEGER', 'long':'INTEGER', 'str':'TEXT', 'unicode':'TEXT', 'float':'REAL', 'list':'INTEGER[]'}
 
 from classes import Product, Ad, Category, Image
 import psycopg2
@@ -73,6 +73,7 @@ class database_sql():
         except Exception as e:
             print e
 
+
     def add_product(self, product):
         parameters = product.to_dict()
         del parameters['id']
@@ -80,6 +81,10 @@ class database_sql():
         request = 'INSERT INTO Product ('
         for key in keys:
             request += key + '=' + self.f + ', '
+    
+            if (type(parameters[key]).__name__=='list'):
+                parameters[key] = 'ARRAY' + parameters[key]
+                
         request = request[0:-2]
         request += ')'
         val = ""
@@ -94,11 +99,13 @@ class database_sql():
         return val
 
     def update_product(self, product):
-        parameters = product.to_dict().keys():
+        parameters = product.to_dict()
+        keys = parameters.keys()
         request = 'UPDATE Product SET '
-        for column in parameters:
-            request += column + '=' + self.f + ', '
-        
+        for key in keys:
+            request += key + '=' + self.f + ', '
+            if (type(parameters[key]).__name__=='list'):
+                parameters[key] = 'ARRAY' + parameters[key]
         request = request[0:-2]
         request += " WHERE id = " + str(product.id)
         try:
@@ -108,20 +115,17 @@ class database_sql():
             print e
         
     def load_product(self, product_id):
-
         columns = Employee().to_dict().keys()
         request = 'SELECT '
         for column in columns:
             request += column + ', '
         request = request[0:-2] + ' FROM Product '
-
+        rows = []
         try:
             self.cursor.execute(request)
             rows = self.cursor.fetchall()
-
         except Exception as e:
             print e
-            rows = []
 
         products = []
         for row in rows:
@@ -133,7 +137,6 @@ class database_sql():
             products.append(product)
         return products
 
-
     def delete_product(self, product_id):
         try:
             self.cursor.execute("DELETE from Product where Id = %s" % product_id)
@@ -141,6 +144,7 @@ class database_sql():
             print("Total rows deleted: %s" % self.cursor.rowcount)
         except Exception as e:
             print e
+
 
 
     def add_category(self, category):
@@ -164,10 +168,11 @@ class database_sql():
         return val
         
     def update_category(self, category):
-        parameters = category.to_dict().keys():
+        parameters = category.to_dict()
+        keys = parameters.keys()
         request = 'UPDATE Category SET '
-        for column in parameters:
-            request += column + '=' + self.f + ', '
+        for key in keys:
+            request += key + '=' + self.f + ', '
         
         request = request[0:-2]
         request += " WHERE id = " + str(category.id)
@@ -185,14 +190,13 @@ class database_sql():
         request = request[0:-2] + ' FROM Product '
         request += ' WHERE category = '
         request += category_id
-
+        rows = []
         try:
             self.cursor.execute(request)
             rows = self.cursor.fetchall()
 
         except Exception as e:
             print e
-            rows = []
 
         products = []
         for row in rows:
@@ -210,14 +214,13 @@ class database_sql():
         for column in columns:
             request += column + ', '
         request = request[0:-2] + ' FROM Category '
-
+        rows = []
         try:
             self.cursor.execute(request)
             rows = self.cursor.fetchall()
 
         except Exception as e:
             print e
-            rows = []
 
         categories = []
         for row in rows:
@@ -230,11 +233,12 @@ class database_sql():
         return categories
 
     def get_random_products(self, number_of_products):
+        columns = Product().to_dict().keys()
         self.cursor.execute("SELECT COUNT(*) FROM Product")
         count = self.cursor.fetchone()[1]
         
         request = 'SELECT * from Product'
-        
+        rows = []
         if (int(count) > int(number_of_product)):
             request += ' OFFSET RANDOM() * '
             request += count
@@ -245,7 +249,6 @@ class database_sql():
             rows = self.cursor.fetchall()
         except Exception as e:
             print e
-               rows = []
 
         products = []
         for row in rows:
@@ -256,6 +259,8 @@ class database_sql():
             product.set_values(values_dict)
             products.append(product)
         return products
+
+
 
     def add_ad(self, ad):
         parameters = ad.to_dict()
@@ -278,11 +283,11 @@ class database_sql():
         return val
 
     def update_ad(self, ad):
-        parameters = ad.to_dict().keys():
+        parameters = ad.to_dict()
+        keys = parameters.keys()
         request = 'UPDATE Ad SET '
-        for column in parameters:
-            request += column + '=' + self.f + ', '
-        
+        for key in keys:
+            request += key + '=' + self.f + ', '
         request = request[0:-2]
         request += " WHERE id = " + str(ad.id)
         try:
@@ -291,13 +296,31 @@ class database_sql():
         except Exception as e:
             print e
 
-    def delete_ad(self, ad_id):
+    def load_ad(self, ad_id):
+        columns = Employee().to_dict().keys()
+        request = 'SELECT '
+        for column in columns:
+            request += column + ', '
+        request = request[0:-2] + ' FROM Product '
+        request += ' WHERE ad = '
+        request += ad_id
+        rows = []
         try:
-            self.cursor.execute("DELETE from Ad where id = %s" % ad_id)
-            self.db.commit()
-            print("Total rows deleted: %s" % self.cursor.rowcount)
+            self.cursor.execute(request)
+            rows = self.cursor.fetchall()
+
         except Exception as e:
             print e
+
+        products = []
+        for row in rows:
+            values_dict = {}
+            for i in xrange(len(columns)):
+                values_dict[columns[i]] = row[i]
+            product = Product()
+            product.set_values(values_dict)
+            products.append(product)
+        return products
 
     def get_all_ads(self):
         columns = Ad().to_dict().keys()
@@ -305,14 +328,13 @@ class database_sql():
         for column in columns:
             request += column + ', '
         request = request[0:-2] + ' FROM Ad '
-
+        rows = []
         try:
             self.cursor.execute(request)
             rows = self.cursor.fetchall()
 
         except Exception as e:
             print e
-            rows = []
 
         ads = []
         for row in rows:
@@ -323,6 +345,15 @@ class database_sql():
             ad.set_values(values_dict)
             ads.append(ad)
         return ads
+
+    def delete_ad(self, ad_id):
+        try:
+            self.cursor.execute("DELETE from Ad where id = %s" % ad_id)
+            self.db.commit()
+            print("Total rows deleted: %s" % self.cursor.rowcount)
+        except Exception as e:
+            print e
+
 
     def add_image(self, image):
         parameters = image.to_dict()
@@ -388,6 +419,8 @@ class database_sql():
         except Exception as e:
             print e
 
+
+
     def add_order(self, order):
         parameters = order.to_dict()
         del parameters['id']
@@ -395,6 +428,8 @@ class database_sql():
         request = 'INSERT INTO Order ('
         for key in keys:
             request += key + '=' + self.f + ', '
+            if (type(parameters[key]).__name__=='list'):
+                parameters[key] = 'ARRAY' + parameters[key]
         request = request[0:-2]
         request += ')'
         val = ""
@@ -409,11 +444,13 @@ class database_sql():
         return val
 
     def update_order(self, order):
-        parameters = order.to_dict().keys():
+        parameters = order.to_dict()
+        keys = parameters.keys()
         request = 'UPDATE Order SET '
-        for column in parameters:
-            request += column + '=' + self.f + ', '
-        
+        for key in keys:
+            request += key + '=' + self.f + ', '
+            if (type(parameters[key]).__name__=='list'):
+                parameters[key] = 'ARRAY' + parameters[key]
         request = request[0:-2]
         request += " WHERE id = " + str(order.id)
         try:
@@ -429,14 +466,12 @@ class database_sql():
         for column in columns:
             request += column + ', '
         request = request[0:-2] + ' FROM Order '
-
+        rows = []
         try:
             self.cursor.execute(request)
             rows = self.cursor.fetchall()
-
         except Exception as e:
             print e
-            rows = []
 
         orders = []
         for row in rows:
@@ -454,14 +489,12 @@ class database_sql():
         for column in columns:
             request += column + ', '
         request = request[0:-2] + ' FROM Order '
-
+        rows = []
         try:
             self.cursor.execute(request)
             rows = self.cursor.fetchall()
-
         except Exception as e:
             print e
-            rows = []
 
         order = []
         for row in rows:
