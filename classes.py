@@ -47,7 +47,24 @@ class Image():
     def to_dict(self):
         return self.__dict__
 
+class Order():
+    def __init__(self, init_values = None):
+        self.id = 1
+        self.name = 'some client name'
+        self.phone = '+7 123'
+        self.address = 'abc'
+        self.products = [1,5,7]
+        if init_values != None:
+            for key in init_values.keys():
+                setattr(self, key, init_values[key])
+                
+    def set_values(self, values):
+        for key in values.keys():
+            setattr(self, key, values[key])
 
+    def to_dict(self):
+        return self.__dict__          
+                
 '''class User():
     def __init__(self):
         self.name = "user1"
