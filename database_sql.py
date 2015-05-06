@@ -476,7 +476,7 @@ class database_sql():
         return val
 
     def update_image(self, image):
-        parameters = image.to_dict().keys():
+        parameters = image.to_dict().keys()
         request = 'UPDATE Image SET '
         for column in parameters:
             request += column + '=' + self.f + ', '

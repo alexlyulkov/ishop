@@ -127,7 +127,7 @@ def product_page(product_id):
                            categories = categories,
                            product = product)
 
-def Contact_us_page():
+def contact_us_page():
     categories = db.get_categories()
     return render_template('contactUs.html',
                            categories = categories)
@@ -146,6 +146,24 @@ def make_order(values):
     return render_template('orderSuccess.html',
                            categories = db.load_categories(),
                            order = order)
+
+def order_page(order_id):
+    order = db.load_order(order_id)
+    return render_template('order.html',
+                           categories = db.load_categories(),
+                           order = order)
+
+def delete_order(order_id):
+    db.delete_order(order_id)
+    return redirect("/orders")
+
+
+def orders_page():
+    orders = db.load_orders()
+    return render_template('orders.html',
+                           categories = db.load_categories(),
+                           orders = orders)
+
     
 
 def add_to_cart(product_id):

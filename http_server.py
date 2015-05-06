@@ -195,7 +195,7 @@ def modify_category(category_id):
 
 @http_server.route("/save_category", methods=['GET', 'POST'])
 @website_authorization.requires_auth
-def cart_page():
+def save_category():
     try:
         values = request.form.to_dict()
         return website.save_category(values)
@@ -225,7 +225,7 @@ def modify_ad(ad_id):
 
 @http_server.route("/save_ad", methods=['GET', 'POST'])
 @website_authorization.requires_auth
-def cart_page():
+def save_ad():
     try:
         uploaded_files = request.files.getlist("image")
         values = request.form.to_dict()
@@ -266,7 +266,7 @@ def modify_product(product_id):
 
 @http_server.route("/save_product", methods=['GET', 'POST'])
 @website_authorization.requires_auth
-def cart_page():
+def save_product():
     try:
         uploaded_files = request.files.getlist("images")
         values = request.form.to_dict()
@@ -290,23 +290,39 @@ def delete_product(product_id):
 
 @http_server.route("/orders", methods=['GET', 'POST'])
 @website_authorization.requires_auth
+def orders():
+    try:
+        return website.orders()
+    except Exception, e:
+        print traceback.format_exc()
+        print e
 
 @http_server.route("/order/<int:order_id>", methods=['GET', 'POST'])
 @website_authorization.requires_auth
+def order(order_id):
+    try:
+        return website.order(order_id)
+    except Exception, e:
+        print traceback.format_exc()
+        print e
 
 @http_server.route("/delete_order/<int:order_id>", methods=['GET', 'POST'])
 @website_authorization.requires_auth
+def delete_order(order_id):
+    try:
+        return website.delete_order(order_id)
+    except Exception, e:
+        print traceback.format_exc()
+        print e
 
 
 
 
 @http_server.route("/contatcs", methods=['GET', 'POST'])
-def cart_page():
+def contacts():
     try:
-        return website.cart_page()
+        return website.contact_us_page()
     except Exception, e:
         print traceback.format_exc()
         print e
-
-@http_server.route("/delivery", methods=['GET', 'POST'])
 

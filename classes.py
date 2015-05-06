@@ -17,13 +17,13 @@ class Category():
 
 class Product():
     def __init__(self, init_values = None):
-        self.id = 1
-        self.name = "product1"
-        self.description = "good product"
-        self.brand = "nike"
-        self.price = 123
+        self.id = -1
+        self.name = ""
+        self.description = ""
+        self.brand = ""
+        self.price = 0
         self.category = 1
-        self.images_ids = [1]
+        self.images_ids = []
         if init_values != None:
             for key in init_values.keys():
                 setattr(self, key, init_values[key])
@@ -37,9 +37,9 @@ class Product():
 
 class Ad():
     def __init__(self, init_values = None):
-        self.id = 1
-        self.image_id = 2
-        self.name = 'some ad name'
+        self.id = -1
+        self.image_id = 1
+        self.name = ''
         if init_values != None:
             for key in init_values.keys():
                 setattr(self, key, init_values[key])
@@ -53,7 +53,7 @@ class Ad():
 
 class Image():
     def __init__(self):
-        self.id = 1
+        self.id = -1
         self.bytes = 'binary data'
 
     def set_values(self, values):
@@ -66,10 +66,10 @@ class Image():
 class Order():
     def __init__(self, init_values = None):
         self.id = 1
-        self.name = 'some client name'
-        self.phone = '+7 123'
-        self.address = 'abc'
-        self.products = [1,5,7]
+        self.name = ''
+        self.phone = ''
+        self.address = ''
+        self.products = []
         if init_values != None:
             for key in init_values.keys():
                 setattr(self, key, init_values[key])
