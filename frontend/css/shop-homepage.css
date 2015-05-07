@@ -14,7 +14,8 @@ body {
 	height: 50px;
 }
 .slide-image {
-    width: 100%;
+    width: auto;
+	height: 250px;
 }
 
 .carousel-holder {
@@ -27,7 +28,7 @@ body {
 }
 
 .caption {
-    height: 130px;
+    height: auto;
     overflow: hidden;
 }
 
