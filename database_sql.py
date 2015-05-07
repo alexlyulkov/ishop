@@ -208,17 +208,24 @@ class database_sql():
         self.cursor.execute("DELETE from Category where id = %s" % category_id)
         self.db.commit()
 
-
-    def load_category_products(self, category_id):
+    def load_category_products(self, category_id, sort_by = id, order = ASC, brands_filter = []):
         columns = Product().to_dict().keys()
         request = 'SELECT '
         for column in columns:
             request += column + ', '
         request = request[0:-2] + ' FROM Product '
-        request += ' WHERE category = '
+        request += 'WHERE category = '
         request += str(category_id)
-        rows = []
 
+        if len(brands_filter)>0:
+            request += ' AND ('
+            for brand in brands_filter:
+                request += 'brand = ' + brand + ' OR '
+            request = request[0:-4] + ')'
+        if sort_by and order:
+            request += ' ORDER BY ' + str(sort_by) + ' ' + str(order)
+            
+        rows = []
         self.cursor.execute(request)
         rows = self.cursor.fetchall()
 
@@ -231,6 +238,14 @@ class database_sql():
             product.set_values(values_dict)
             products.append(product)
         return products
+        
+    def get_category_brands(self, category_id):
+        request = 'SELECT DISTINCT brand FROM Product WHERE category = '
+        request += str(category_id)
+        self.cursor.execute(request)
+        rows = self.cursor.fetchall()
+        brands = [x[0] for x in rows]
+        return brands
 
     def load_categories(self):
         columns = Category().to_dict().keys()
