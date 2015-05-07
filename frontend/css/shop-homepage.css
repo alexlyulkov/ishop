@@ -39,7 +39,8 @@ body {
 }
 
 .thumbnail img {
-    width: 100%;
+    width: auto;
+    height: 180px
 }
 
 .ratings {
@@ -49,6 +50,8 @@ body {
 }
 
 .thumbnail {
+	height: 230px;
+	width: 280px;
     padding: 0;
 }
 
