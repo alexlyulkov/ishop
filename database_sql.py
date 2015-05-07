@@ -208,7 +208,7 @@ class database_sql():
         self.cursor.execute("DELETE from Category where id = %s" % category_id)
         self.db.commit()
 
-    def load_category_products(self, category_id, sort_by = id, order = ASC, brands_filter = []):
+    def load_category_products(self, category_id, sort_by = 'id', order = 'ASC', brands_filter = []):
         columns = Product().to_dict().keys()
         request = 'SELECT '
         for column in columns:
