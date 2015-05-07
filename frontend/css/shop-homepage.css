@@ -15,7 +15,9 @@ body {
 }
 .slide-image {
     width: auto;
-	height: 250px;
+	height: 250px !important;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .carousel-holder {
