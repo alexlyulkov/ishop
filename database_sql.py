@@ -220,13 +220,13 @@ class database_sql():
         if len(brands_filter)>0:
             request += ' AND ('
             for brand in brands_filter:
-                request += 'brand = ' + brand + ' OR '
+                request += 'brand = %s' ' OR '
             request = request[0:-4] + ')'
         if sort_by and order:
             request += ' ORDER BY ' + str(sort_by) + ' ' + str(order)
             
         rows = []
-        self.cursor.execute(request)
+        self.cursor.execute(request, brands_filter)
         rows = self.cursor.fetchall()
 
         products = []

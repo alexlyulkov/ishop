@@ -123,13 +123,46 @@ def index_page():
                            productItemsAds = randomProducts)
 
 
-def category_page(category_id):
+def category_page(category_id, values):
+    print values
+    sorting = 1
+    brands = {}
+    all_brands = db.get_category_brands(category_id)
+    selected_brands = []
+    for b in all_brands:
+        brands[b] = 0
+    for key in values.keys():
+        if key.startswith('b_'):
+            brands[key[2:]] = 1
+            selected_brands.append(key[2:])
+    if values.get('sorting'):
+        sorting = int(values['sorting'])
+
+    sort_by = 'id'
+    order = 'ASC'
+    if sorting == 1:
+        sort_by = 'price'
+        order = 'ASC'
+    if sorting == 2:
+        sort_by = 'price'
+        order = 'DESC'
+
+    #selected_brands = []
+    #    if values.get('brands'):
+    #    for
+        
     categories = db.load_categories()
-    products = db.load_category_products(category_id)
+    products = db.load_category_products(category_id,
+                                         sort_by = sort_by,
+                                         order = order,
+                                         brands_filter = selected_brands)
 
     return render_template('category.html',
                            categories = categories,
-                           filteredProducts = products)
+                           filteredProducts = products,
+                           brands = brands,
+                           category_id = category_id,
+                           sorting = sorting)
 
 def product_page(product_id):
     categories = db.load_categories()

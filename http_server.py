@@ -90,7 +90,8 @@ def product_page(product_id):
 @http_server.route("/category/<int:category_id>", methods=['GET', 'POST'])
 def categoty_page(category_id):
     try:
-        res =  website.category_page(category_id)
+        values = request.args.to_dict()
+        res =  website.category_page(category_id, values)
         return res
     except Exception, e:
         print traceback.format_exc()

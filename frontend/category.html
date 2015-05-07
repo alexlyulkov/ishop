@@ -88,18 +88,22 @@
 
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 categories">
 			<p class="lead">Сортировка</p>
-			<form class="filterForm" action="/category/category_id" methon="post">
-				<select  name = "sort">
-					<option value="sortByPriceLowToHigh">Цена: сначала недорогие</option>
-					<option selected value="sortByPriceHighToLow">Цена: сначала дорогие</option>
+			<form class="filterForm" action="/category/{{ category_id }}" method="get">
+				<select  name = "sorting">
+					<option {% if sorting == 1 %} selected {% endif %} value="1">Цена: сначала недорогие</option>
+					<option {% if sorting == 2 %} selected {% endif %} value="2">Цена: сначала дорогие</option>
 				</select>
-			<input class="btn btn-default" type="submit" value="Применить">
-			</form>
+			<!--input class="btn btn-default" type="submit" value="Применить">
+			</form-->
 			<p class="lead">Фильтры</p>
-					<form class="filterForm" action="/category/category_id" methon="post">
+					<!--form class="filterForm" action="/category/{{ category_id }}" method="post"-->
 						<h5><i><b>Бренды</b></i></h5>
-						{% for brand in brands %}
-							<input type="checkbox" name="{{ brands[brand] }}" value="1">{{ brand }}<br>
+						{% for brand, value in brands.iteritems() %}
+							{% if value == 1 %}
+								<input type="checkbox" name="b_{{ brand }}" checked>{{ brand }}<br>
+							{% else %}
+								<input type="checkbox" name="b_{{ brand }}" >{{ brand }}<br>
+							{% endif %}
 						{% endfor %}
 						<input class="btn btn-default" type="submit" value="Применить">
 					</form>
