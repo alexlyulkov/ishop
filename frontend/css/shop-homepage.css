@@ -45,11 +45,11 @@ body {
 }
 .thumbnail img {
     width: auto;
-    height: 180px;
+    height: 180px !important;
 }
 .thumbnail-href {
     width: auto;
-    height: 180px;
+    height: 180px !important;
 }
 .thumbnail .caption-full {
     padding: 9px;
