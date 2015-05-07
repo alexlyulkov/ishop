@@ -204,10 +204,14 @@ def order_page(order_id):
     products = []
     for id in order.products:
         products.append(db.load_product(id))
+	cost = 0
+	for p in products
+		cost += p.price
     return render_template('order.html',
                            categories = db.load_categories(),
                            order = order,
-                           products = products)
+                           products = products
+						   priceSum = cost)
 
 def delete_order(order_id):
     db.delete_order(order_id)
