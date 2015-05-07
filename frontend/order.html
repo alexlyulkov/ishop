@@ -98,7 +98,7 @@
 				{% for item in products %}
 					<tr>
 						<td></td>
-						<td><a href="{{ item }}">{{ item.name}}</a></td>
+						<td><a href="/product/{{ item.id }}">{{ item.name}}</a></td>
 						<td>{{ item.price }}</td>
 					</tr>
 				{% endfor %}

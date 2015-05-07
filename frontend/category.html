@@ -12,10 +12,10 @@
     <title>ShopAtUs</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="/css/shop-homepage.css" rel="stylesheet">
+    <link href="css/shop-homepage.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -87,14 +87,15 @@
         <div class="row">
 
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 categories">
-			<p class="lead">Сортировка</p>
 			<form class="filterForm" action="/category/{{ category_id }}" method="get">
-				<select  name = "sorting">
-					<option {% if sorting == 1 %} selected {% endif %} value="1">Цена: сначала недорогие</option>
-					<option {% if sorting == 2 %} selected {% endif %} value="2">Цена: сначала дорогие</option>
-				</select>
+			<p class="lead">Сортировка</p>
+			<select  class="btn btn-default" name = "sorting">
+				<option {% if sorting == 1 %} selected {% endif %} value="1">Цена: сначала недорогие</option>
+				<option {% if sorting == 2 %} selected {% endif %} value="2">Цена: сначала дорогие</option>
+			</select>
 			<!--input class="btn btn-default" type="submit" value="Применить">
 			</form-->
+			<h1></h1>
 			<p class="lead">Фильтры</p>
 					<!--form class="filterForm" action="/category/{{ category_id }}" method="post"-->
 						<h5><i><b>Бренды</b></i></h5>
