@@ -191,6 +191,15 @@ def modify_category(category_id):
         print traceback.format_exc()
         return '<pre>' + traceback.format_exc() + '</pre>'
 
+@http_server.route("/delete_category/<int:category_id>", methods=['GET', 'POST'])
+@website_authorization.requires_auth
+def delete_category(category_id):
+    try:
+        return website.delete_category(category_id)
+    except Exception, e:
+        print traceback.format_exc()
+        return '<pre>' + traceback.format_exc() + '</pre>'
+
 
 @http_server.route("/save_category", methods=['GET', 'POST'])
 @website_authorization.requires_auth
