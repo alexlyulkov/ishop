@@ -69,8 +69,8 @@ def get_image(image_id):
             return http_server.send_static_file('frontend/images/product1.jpg')
         if image_id == 2:
             return http_server.send_static_file('frontend/images/ad1.jpg')'''
-
-        image = db.get_image(image_id)
+        with db.mutex:
+            image = db.get_image(image_id)
         return send_file(io.BytesIO(image.bytes),
                          attachment_filename='product_picture.png',
                      mimetype='image/png')

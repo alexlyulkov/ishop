@@ -4,12 +4,14 @@ from classes import *
 import psycopg2
 import traceback
 import base64
+import threading
 
 class database_sql():
     def __init__(self):
         self.db = None
         self.cursor = None
         self.f = None
+        self.mutex = threading.Lock()
         
     def init_postgresql(self, database, user, password, host, port):
         self.f = '%s'
