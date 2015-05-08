@@ -38,27 +38,29 @@ body {
     white-space: nowrap;
 }
 
+.thumbnail {
+	height: 230px;
+	width: 280px;
+    padding: 0;
+}
 .thumbnail img {
     width: auto;
-    height: 180px
+    height: 180px !important;
 }
-
+.thumbnail-href {
+    width: auto;
+    height: 180px !important;
+}
+.thumbnail .caption-full {
+    padding: 9px;
+    color: #333;
+}
 .ratings {
     padding-right: 10px;
     padding-left: 10px;
     color: #d17581;
 }
 
-.thumbnail {
-	height: 230px;
-	width: 280px;
-    padding: 0;
-}
-
-.thumbnail .caption-full {
-    padding: 9px;
-    color: #333;
-}
 @media (max-width: 768px){
 	.categories
 	{

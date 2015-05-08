@@ -125,9 +125,11 @@
                     <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="thumbnail">
                             <!-- <img src="http://placehold.it/320x150" alt=""> -->
-							<img src="/image/{{ item.images_ids[0] }}" alt="{{ item.description }}">
+							<a class="thumbnail-href" href="/product/{{ item.id }}">
+								<img src="/image/{{ item.images_ids[0] }}" alt="{{ item.description }}">
+							</a>
                             <div class="caption">
-                                <h4 class="pull-right">{{ item.price }}</h4>
+                                <h4 class="pull-right">{{ item.price }} руб.</h4>
                                 <h4><a href="/product/{{ item.id }}">{{ item.name }}</a></h4>
                             </div>
                         </div>
